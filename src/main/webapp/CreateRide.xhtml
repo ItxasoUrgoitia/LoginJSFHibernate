@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+    <title>Create Ride</title>
+    <style>
+        .form-container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 30px;
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .section-title {
+            font-size: 20px;
+            font-weight: bold;
+            margin: 25px 0 20px 0;
+            color: #333;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #ddd;
+        }
+        .form-row {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+            gap: 20px;
+        }
+        .form-label {
+            min-width: 150px;
+            font-weight: bold;
+            font-size: 14px;
+        }
+        .form-field {
+            flex: 1;
+        }
+        .calendar-container {
+            margin-top: 25px;
+            border: 1px solid #ccc;
+            padding: 20px;
+            border-radius: 8px;
+            background-color: white;
+        }
+        .create-button {
+            margin-top: 30px;
+            padding: 12px 30px;
+            font-size: 16px;
+            font-weight: bold;
+            background-color: #007bff;
+            border: none;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .create-button:hover {
+            background-color: #0056b3;
+        }
+        /*.success-message {
+            color: #28a745;
+            font-weight: bold;
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #d4edda;
+            border: 1px solid #c3e6cb;
+            border-radius: 5px;
+        }*/
+        .number-input {
+            width: 120px !important;
+        }
+        .calendar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            padding: 10px;
+            background-color: #f8f9fa;
+            border-radius: 5px;
+        }
+        .calendar-title {
+            font-weight: bold;
+            font-size: 16px;
+        }
+        .calendar-navigation {
+            display: flex;
+            gap: 10px;
+        }
+        .calendar-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .calendar-table th {
+            background-color: #e9ecef;
+            padding: 10px;
+            text-align: center;
+            font-weight: bold;
+            border: 1px solid #dee2e6;
+        }
+        .calendar-table td {
+            padding: 12px;
+            text-align: center;
+            border: 1px solid #dee2e6;
+            cursor: pointer;
+        }
+        .calendar-table td:hover {
+            background-color: #f8f9fa;
+        }
+        .other-month {
+            color: #6c757d;
+            background-color: #f8f9fa;
+        }
+        .current-day {
+            background-color: #007bff;
+            color: white;
+            font-weight: bold;
+        }
+    </style>
+</h:head>
+
+<h:body>
+
+<div class="form-container">
+    <h2 style="font-size: 24px; margin-bottom: 25px; color: #333;">Create Ride</h2>
+
+    <h:form id="form">
+
+			<!-- Depart City Row -->
+			<div class="form-row">
+				<div class="form-label">
+					<h:outputLabel value="Depart City" for="departCity" />
+				</div>
+				<div class="form-field">
+					<p:inputText id="departCity" value="#{createRidesBean.departCity}"
+						style="width:300px" placeholder="Enter departure city" />
+				</div>
+			</div>
+
+			<!-- Arrival City Row -->
+			<div class="form-row">
+				<div class="form-label">
+					<h:outputLabel value="Arrival City" for="arrivalCity" />
+				</div>
+				<div class="form-field">
+					<p:inputText id="arrivalCity"
+						value="#{createRidesBean.arrivalCity}" style="width:300px"
+						placeholder="Enter arrival city" />
+				</div>
+			</div>
+
+			<!-- Number of Seats Row -->
+        <div class="form-row">
+            <div class="form-label">
+                <h:outputLabel value="Number of Seats" for="seats"/>
+            </div>
+            <div class="form-field">
+                <p:inputNumber id="seats" value="#{createRidesBean.seats}" 
+                             minValue="1" maxValue="8" 
+                             styleClass="number-input" />
+            </div>
+        </div>
+
+        <!-- Price Row -->
+        <div class="form-row">
+            <div class="form-label">
+                <h:outputLabel value="Price (€)" for="price"/>
+            </div>
+            <div class="form-field">
+                <p:inputNumber id="price" value="#{createRidesBean.price}" 
+                             minValue="0" maxValue="1000"
+                             decimalPlaces="2"
+                             styleClass="number-input" />
+            </div>
+        </div>
+        
+        <!-- email Row -->
+			<div class="form-row">
+				<div class="form-label">
+					<h:outputLabel value="Driver email" for="email" />
+				</div>
+				<div class="form-field">
+					<p:inputText id="email"
+						value="#{createRidesBean.email}" style="width:300px"
+						placeholder="Enter your email" />
+				</div>
+			</div>
+
+        <!-- Ride Date Section -->
+        <div class="section-title">Ride date</div>
+
+			<td><p:calendar id="data" value="#{createRidesBean.data}"
+					navigator="false" mode="inline">
+					
+				</p:calendar></td>
+
+			<!-- Success Message 
+        <div class="success-message" rendered="#{createRidesBean.rideCreated}">
+            ✓ Ride created successfully!
+        </div> -->
+
+        <!-- Create Ride Button -->
+        <p:commandButton value="Create Ride" 
+                        action="#{createRidesBean.createRide}" 
+                        styleClass="create-button"
+                        update="@form" />
+
+        <p:messages />
+        <p:messages autoUpdate="true" />
+         <p:commandButton value="ns" 
+                        action="#{createRidesBean.ns}" 
+                        styleClass="create-button"
+                        update="@form" />
+
+        <p:messages />
+        
+        <h:outputText value="#{createRidesBean.message}" style="color:red; font-weight:bold; margin-top:15px;" />
+	
+    </h:form>
+</div>
+
+</h:body>
+</html>

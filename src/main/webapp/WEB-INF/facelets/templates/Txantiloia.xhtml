@@ -1,0 +1,30 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+<h:head>
+	<meta http-equiv="Content-Type" content="text/html;" />
+	<title><ui:insert name="izenburua">Titulua definitzeke...</ui:insert></title>
+</h:head>
+<h:body>
+	<h1 align="center">
+		<img
+			src="http://www.ehu.eus/documents/340468/5849813/Biling%C3%BCe_positivo_baja.jpg"
+			width="500" height="70" />
+	</h1>
+	<h:panelGrid columns="2" align="center" border="3" cellpadding="10"
+		cellspacing="1">
+		<h:panelGrid columns="1"
+			style="background-color: lightblue; color: blue">
+			<ui:include src="Menua.xhtml" />
+		</h:panelGrid>
+		<h:panelGrid columns="1">
+			<ui:insert name="gorputza">Eraikitzen...</ui:insert>
+		</h:panelGrid>
+	</h:panelGrid>
+	<ui:insert name="orri-oina">
+		<h4 style="color: blue;" align="center">&#169; Software Ingeniaritza II</h4>
+	</ui:insert>
+</h:body>
+</html>
