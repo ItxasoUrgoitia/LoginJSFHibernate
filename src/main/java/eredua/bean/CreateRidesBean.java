@@ -13,11 +13,11 @@ import java.util.ResourceBundle;
 import org.primefaces.event.SelectEvent;
 
 import businessLogic.BLFacade;
-import configuration.UtilDate;
+
 import domain.Ride;
 import exceptions.RideAlreadyExistException;
 import exceptions.RideMustBeLaterThanTodayException;
-import gui.MainGUI;
+
 
 @Named
 @RequestScoped

@@ -3,10 +3,10 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.is2.frameworks</groupId>
-	<artifactId>LoginJSF</artifactId>
+	<artifactId>LoginJSF2</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>war</packaging>
-	<name>LoginJSF</name>
+	<name>LoginJSF2</name>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -31,16 +31,17 @@
 
 		<!-- CDI API -->
 		<dependency>
-			<groupId>jakarta.enterprise</groupId>
-			<artifactId>jakarta.enterprise.cdi-api</artifactId>
-			<version>3.0.0</version>
+    		<groupId>jakarta.enterprise</groupId>
+    		<artifactId>jakarta.enterprise.cdi-api</artifactId>
+    		<version>3.0.0</version>
 		</dependency>
 
-		<!-- Weld (Implementación de CDI) - ESTA ES LA QUE FALTA -->
+
+		<!-- Weld (ImplementaciÃ³n de CDI) - ESTA ES LA QUE FALTA -->
 		<dependency>
-			<groupId>org.jboss.weld.servlet</groupId>
-			<artifactId>weld-servlet-core</artifactId>
-			<version>4.0.3.Final</version>
+    		<groupId>org.jboss.weld.servlet</groupId>
+    		<artifactId>weld-servlet-shaded</artifactId>
+    		<version>4.0.3.Final</version>
 		</dependency>
 
 		<!-- Inject API -->
@@ -70,8 +71,38 @@
 			</version>
 		</dependency>
 
-		
-		
+
+		<!--<dependency><groupId>1.0</groupId><artifactId>Rides24</artifactId><version>0.0.1-SNAPSHOT</version></dependency>-->
+
+		<!-- Hibernate ORM -->
+<dependency>
+    <groupId>org.hibernate.orm</groupId>
+    <artifactId>hibernate-core</artifactId>
+    <version>6.3.0.Final</version>
+</dependency>
+
+		<!-- H2 en memoria -->
+<dependency>
+    <groupId>com.h2database</groupId>
+    <artifactId>h2</artifactId>
+    <version>2.2.224</version>
+</dependency>
+<dependency>
+    <groupId>jakarta.persistence</groupId>
+    <artifactId>jakarta.persistence-api</artifactId>
+    <version>3.1.0</version>
+</dependency>
+<dependency>
+    <groupId>jakarta.xml.bind</groupId>
+    <artifactId>jakarta.xml.bind-api</artifactId>
+    <version>4.0.1</version>
+</dependency>
+
+<dependency>
+    <groupId>org.glassfish.jaxb</groupId>
+    <artifactId>jaxb-runtime</artifactId>
+    <version>4.0.4</version>
+</dependency>
 	</dependencies>
 	
 	
