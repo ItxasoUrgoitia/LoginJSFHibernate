@@ -6,8 +6,11 @@ import java.util.ResourceBundle;
 
 import dataAccess.HibernateDataAccess;
 import domain.Ride;
+import domain.User;
 import domain.Driver;
+import domain.Passenger;
 import exceptions.RideMustBeLaterThanTodayException;
+import exceptions.DriverDoesNotExistException;
 import exceptions.RideAlreadyExistException;
 
 /**
@@ -20,7 +23,7 @@ public class BLFacadeImplementation implements BLFacade {
 		System.out.println("Creating BLFacadeImplementation instance");
 
 		dbManager = new HibernateDataAccess();
-
+		
 		// dbManager.close();
 
 	}
@@ -31,6 +34,7 @@ public class BLFacadeImplementation implements BLFacade {
 		// ConfigXML c=ConfigXML.getInstance();
 
 		dbManager = da;
+		dbManager.initializeDB();
 	}
 
 	/**
@@ -56,7 +60,7 @@ public class BLFacadeImplementation implements BLFacade {
 	 */
 	
 	public Ride createRide(String from, String to, Date date, int nPlaces, float price, String driverEmail)
-			throws RideMustBeLaterThanTodayException, RideAlreadyExistException {
+			throws RideMustBeLaterThanTodayException, RideAlreadyExistException, DriverDoesNotExistException {
 
 		
 		return  dbManager.createRide(from, to, date, nPlaces, price, driverEmail);
@@ -89,6 +93,17 @@ public class BLFacadeImplementation implements BLFacade {
 	
 	public void initializeBD() {
 		dbManager.initializeDB();	
+	}
+	
+	public User isRegistered(String email, String pasahitza) {
+		return dbManager.isRegistered(email, pasahitza);
+	}
+	
+	public void createDriver(Driver driver) {
+		dbManager.createDriver(driver);
+	}
+	public void createPassenger(Passenger pasenger) {
+		dbManager.createPassenger(pasenger);
 	}
 
 }

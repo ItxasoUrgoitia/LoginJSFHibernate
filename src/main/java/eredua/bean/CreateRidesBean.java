@@ -15,11 +15,12 @@ import org.primefaces.event.SelectEvent;
 import businessLogic.BLFacade;
 
 import domain.Ride;
+import exceptions.DriverDoesNotExistException;
 import exceptions.RideAlreadyExistException;
 import exceptions.RideMustBeLaterThanTodayException;
 
 
-@Named
+@Named("CreateRidesBean")
 @RequestScoped
 public class CreateRidesBean {
 
@@ -129,10 +130,12 @@ public class CreateRidesBean {
         	System.out.print("Egin da");
         } catch (RideMustBeLaterThanTodayException e1) {
         	// TODO Auto-generated catch block
-        	message = "Gaurko data baino beranduago jarri";
+        	message = "Ride Must Be Later Than Today";
         } catch (RideAlreadyExistException e1) {
         	// TODO Auto-generated catch block
-        	message = "Ride hori jada existitzen da";
+        	message = "Ride Already Exist";
+        } catch (DriverDoesNotExistException e1) {
+        	message = "Driver Does Not Exist";
         }
         
         

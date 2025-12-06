@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+    <title>Hasiera</title>
+
+    <style>
+        .menu-container {
+            max-width: 400px;
+            margin: 100px auto;
+            padding: 30px;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            text-align: center;
+            font-family: Arial, sans-serif;
+        }
+
+        .menu-button {
+    		display: block !important;
+    		width: 100% !important;
+    		margin-top: 20px !important;
+    		margin-bottom: 20px !important;
+    		padding: 15px !important;
+    		font-weight: bold !important;
+    		font-size: 19px !important
+        }
+
+        .menu-button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</h:head>
+
+<h:body>
+
+<div class="menu-container">
+
+    <h2 style="color:#333; margin-bottom: 25px;">Select an option</h2>
+
+    <h:form>
+
+        <!-- QUERY RIDES -->
+        <p:commandButton value="Query Rides"
+                         action="QueryRides"
+                         styleClass="menu-button"/>
+
+        <!-- LOGIN -->
+        <p:commandButton value="Login"
+                         action="Login"
+                         styleClass="menu-button" />
+
+        <!-- REGISTER -->
+        <p:commandButton value="Register"
+                         action="Register"
+                         styleClass="menu-button" />
+
+    </h:form>
+
+</div>
+
+</h:body>
+</html>

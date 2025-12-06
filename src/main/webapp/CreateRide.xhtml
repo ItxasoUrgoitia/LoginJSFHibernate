@@ -133,7 +133,7 @@
 					<h:outputLabel value="Depart City" for="departCity" />
 				</div>
 				<div class="form-field">
-					<p:inputText id="departCity" value="#{createRidesBean.departCity}"
+					<p:inputText id="departCity" value="#{CreateRidesBean.departCity}"
 						style="width:300px" placeholder="Enter departure city" />
 				</div>
 			</div>
@@ -145,7 +145,7 @@
 				</div>
 				<div class="form-field">
 					<p:inputText id="arrivalCity"
-						value="#{createRidesBean.arrivalCity}" style="width:300px"
+						value="#{CreateRidesBean.arrivalCity}" style="width:300px"
 						placeholder="Enter arrival city" />
 				</div>
 			</div>
@@ -156,7 +156,7 @@
                 <h:outputLabel value="Number of Seats" for="seats"/>
             </div>
             <div class="form-field">
-                <p:inputNumber id="seats" value="#{createRidesBean.seats}" 
+                <p:inputNumber id="seats" value="#{CreateRidesBean.seats}" 
                              minValue="1" maxValue="8" 
                              styleClass="number-input" />
             </div>
@@ -168,7 +168,7 @@
                 <h:outputLabel value="Price (€)" for="price"/>
             </div>
             <div class="form-field">
-                <p:inputNumber id="price" value="#{createRidesBean.price}" 
+                <p:inputNumber id="price" value="#{CreateRidesBean.price}" 
                              minValue="0" maxValue="1000"
                              decimalPlaces="2"
                              styleClass="number-input" />
@@ -182,7 +182,7 @@
 				</div>
 				<div class="form-field">
 					<p:inputText id="email"
-						value="#{createRidesBean.email}" style="width:300px"
+						value="#{CreateRidesBean.email}" style="width:300px"
 						placeholder="Enter your email" />
 				</div>
 			</div>
@@ -190,19 +190,19 @@
         <!-- Ride Date Section -->
         <div class="section-title">Ride date</div>
 
-			<td><p:calendar id="data" value="#{createRidesBean.data}"
+			<td><p:calendar id="data" value="#{CreateRidesBean.data}"
 					navigator="false" mode="inline">
 					
 				</p:calendar></td>
 
 			<!-- Success Message 
-        <div class="success-message" rendered="#{createRidesBean.rideCreated}">
+        <div class="success-message" rendered="#{CreateRidesBean.rideCreated}">
             ✓ Ride created successfully!
         </div> -->
 
         <!-- Create Ride Button -->
         <p:commandButton value="Create Ride" 
-                        action="#{createRidesBean.createRide}" 
+                        action="#{CreateRidesBean.createRide}" 
                         styleClass="create-button"
                         update="@form" />
 
@@ -215,7 +215,7 @@
 
         <p:messages />
         
-        <h:outputText value="#{createRidesBean.message}" style="color:red; font-weight:bold; margin-top:15px;" />
+        <h:outputText value="#{CreateRidesBean.message}" style="color:red; font-weight:bold; margin-top:15px;" />
 	
     </h:form>
 </div>

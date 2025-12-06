@@ -37,9 +37,10 @@ public class QueryRidesBean implements Serializable{
 	    availableRides = facadeBL.getRides(selectedCity, selectedCity2, selectedDate);
 
 	    System.out.println("Rides encontrados = " + availableRides.size());
-	    return availableRides.toString()
-;
+	    return availableRides.toString();
 	}
+	
+
 
 
 

@@ -5,10 +5,12 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-
 import org.primefaces.event.SelectEvent;
 
 import businessLogic.BLFacade;
+import domain.Driver;
+import domain.Passenger;
+import domain.User;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.enterprise.context.SessionScoped;
@@ -18,12 +20,13 @@ import jakarta.faces.event.AjaxBehaviorEvent;
 import jakarta.inject.Named;
 
 @Named("login")
-@ApplicationScoped
+@RequestScoped
 public class LoginBean implements Serializable {
-	private String izena;
+	private String email;
 	private String pasahitza;
 	private BLFacade facadeBL;
-		
+	private String message;
+	
 	/*public LoginBean() {
 		motak.add(new ErabiltzailearenMota(1,"ikaslea"));
 		motak.add(new ErabiltzailearenMota(2,"irakaslea"));
@@ -39,12 +42,12 @@ public class LoginBean implements Serializable {
 	
 	
 
-	public String getIzena() {
-		return izena;
+	public String getEmail() {
+		return email;
 	}
 
-	public void setIzena(String izena) {
-		this.izena = izena;
+	public void setEmail(String email) {
+		this.email = email;
 	}
 
 	public String getPasahitza() {
@@ -54,15 +57,49 @@ public class LoginBean implements Serializable {
 	public void setPasahitza(String pasahitza) {
 		this.pasahitza = pasahitza;
 	}
+	
+
+	public String getMessage() {
+		return message;
+	}
+
+
+
+	public void setMessage(String message) {
+		this.message = message;
+	}
+
+
 
 	public String egiaztatu() {
-		if (izena.length()!=pasahitza.length()){
-			 FacesContext.getCurrentInstance().addMessage(null,
-			 new FacesMessage("Errorea: izenaren eta pasahitzaren luzera desberdinak dira."));
-			 return null;
-		}
-		return "ok";
+	    message = null;
+	    if (email == null || email.isEmpty()) {
+	        message = "Enter email";
+	        return null;
+	    }
+	    if (pasahitza == null || pasahitza.isEmpty()) {
+	        message = "Enter password";
+	        return null;
+	    }
+
+	    User u = facadeBL.isRegistered(email, pasahitza);
+	    if (u == null) {
+	        message = "Email or password incorrect";
+	        return null;
+	    }
+
+	    // Reconocer tipo de usuario
+	    if (u instanceof Driver) {
+	        System.out.println("Logged in as Driver");
+	        return "CreateRide.xhtml?faces-redirect=true";
+	    } else if (u instanceof Passenger) {
+	        System.out.println("Logged in as Passenger");
+	        return "QueryRides.xhtml?faces-redirect=true";
+	    }
+
+	    return null;
 	}
+
 	
 	
 

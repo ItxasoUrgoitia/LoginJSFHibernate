@@ -5,8 +5,11 @@ import java.util.List;
 
 //import domain.Booking;
 import domain.Ride;
+import domain.User;
 import domain.Driver;
+import domain.Passenger;
 import exceptions.RideMustBeLaterThanTodayException;
+import exceptions.DriverDoesNotExistException;
 import exceptions.RideAlreadyExistException;
 
 
@@ -46,7 +49,7 @@ public interface BLFacade  {
  	 * @throws RideAlreadyExistException if the same ride already exists for the driver
 	 */
    
-   public Ride createRide( String from, String to, Date date, int nPlaces, float price, String driverEmail) throws RideMustBeLaterThanTodayException, RideAlreadyExistException;
+   public Ride createRide( String from, String to, Date date, int nPlaces, float price, String driverEmail) throws RideMustBeLaterThanTodayException, RideAlreadyExistException, DriverDoesNotExistException;
 	
 	
 	/**
@@ -73,6 +76,11 @@ public interface BLFacade  {
 	 * It is invoked only when the option "initialize" is declared in the tag dataBaseOpenMode of resources/config.xml file
 	 */	
 	 public void initializeBD();
-
+	 
+	 public User isRegistered(String email, String pasahitza);
+	 
+	 public void createDriver(Driver driver);
+	 
+	 public void createPassenger(Passenger passenger);
 	
 }

@@ -6,12 +6,16 @@ import java.util.List;
 
 
 import domain.Driver;
+import domain.Passenger;
 import domain.Ride;
+import domain.User;
+import exceptions.DriverDoesNotExistException;
 import exceptions.RideAlreadyExistException;
 import exceptions.RideMustBeLaterThanTodayException;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.EntityTransaction;
+import jakarta.persistence.NoResultException;
 import jakarta.persistence.Persistence;
 import jakarta.persistence.TemporalType;
 
@@ -46,7 +50,7 @@ public class HibernateDataAccess {
     }
 
     public Ride createRide(String from, String to, Date date, int nPlaces, float price, String driverEmail)
-            throws RideMustBeLaterThanTodayException, RideAlreadyExistException {
+            throws RideMustBeLaterThanTodayException, RideAlreadyExistException, DriverDoesNotExistException {
         if (date.before(new Date())) {
             throw new RideMustBeLaterThanTodayException("The ride date must be later than today");
         }
@@ -56,25 +60,26 @@ public class HibernateDataAccess {
         try {
             tx.begin();
 
-            Driver driver = em.find(Driver.class, driverEmail);
-            if (driver == null) {
-                driver = new Driver(driverEmail, "Unknown");
-                em.persist(driver);
+            List<Driver> driver = em.createQuery("SELECT d FROM Driver d WHERE d.email = :email", Driver.class)
+                    .setParameter("email", driverEmail)
+                    .getResultList();
+            if (driver.isEmpty()) {
+                throw new DriverDoesNotExistException("There is no user with that email");
             }
-
             
-            for (Ride r : driver.getRides()) {
+            for (Ride r : driver.get(0).getRides()) {
                 if (r.getFrom().equals(from) && r.getTo().equals(to) && r.getDate().equals(date)) {
                     throw new RideAlreadyExistException("Ride already exists for this driver");
                 }
             }
 
-            Ride ride = new Ride(from, to, date, nPlaces, price, driver);
-            driver.getRides().add(ride);
+            Ride ride = new Ride(from, to, date, nPlaces, price, driver.get(0));
+            driver.get(0).getRides().add(ride);
             em.persist(ride);
 
             tx.commit();
             return ride;
+        
         } catch (RuntimeException e) {
             if (tx.isActive()) tx.rollback();
             throw e;
@@ -96,7 +101,31 @@ public class HibernateDataAccess {
             em.close();
         }
     }
+    
+    public User isRegistered(String email, String pasahitza) {
+        EntityManager em = emf.createEntityManager();
+        try {
+            String jpql = "SELECT u FROM User u WHERE u.email = :email AND u.pasahitza = :pasahitza";
+            User user = em.createQuery(jpql, User.class)
+                          .setParameter("email", email)
+                          .setParameter("pasahitza", pasahitza)
+                          .getSingleResult();
 
+            System.out.println("Login successful: " + user.getClass().getSimpleName());
+            return user;
+        }catch(NoResultException e) {
+        	return null;
+        } catch (Exception e) {
+            e.printStackTrace(); 
+            return null;
+        } finally {
+            em.close();
+        }
+    }
+
+
+
+    
     public List<Date> getThisMonthDatesWithRides(String from, String to, Date date) {
         EntityManager em = emf.createEntityManager();
         try {
@@ -118,8 +147,8 @@ public class HibernateDataAccess {
             tx.begin();
 
             // Ejemplo: crear algunos conductores y rides
-            Driver d1 = new Driver("alice@example.com", "Alice");
-            Driver d2 = new Driver("bob@example.com", "Bob");
+            Driver d1 = new Driver("alice@example.com", "Alice", "456");
+            Driver d2 = new Driver("bob@example.com", "Bob", "789");
 
             em.persist(d1);
             em.persist(d2);
@@ -131,12 +160,99 @@ public class HibernateDataAccess {
             em.persist(r2);
 
             tx.commit();
+            
+           
+        } catch (RuntimeException e) {
+            if (tx.isActive()) tx.rollback();
+            throw e;
+        } finally {
+        	em.close();
+        }
+    
+    } 
+    
+    public void createDriver(Driver driver) {
+        EntityManager em = emf.createEntityManager();
+        EntityTransaction tx = em.getTransaction();
+
+        try {
+            tx.begin();
+            String checkSql = "SELECT email FROM users WHERE email = ?";
+            List<?> result = em.createNativeQuery(checkSql)
+                               .setParameter(1, driver.getEmail())
+                               .getResultList();
+
+            if (!result.isEmpty()) {
+                throw new RuntimeException("User with email " + driver.getEmail() + " already exists.");
+            }
+
+            // 2. Insertar en la tabla users
+            String insertUserSql = "INSERT INTO users (email, name, pasahitza) VALUES (?, ?, ?)";
+            em.createNativeQuery(insertUserSql)
+              .setParameter(1, driver.getEmail())
+              .setParameter(2, driver.getName())
+              .setParameter(3, driver.getPasahitza())
+              .executeUpdate();
+
+            // 3. Insertar en la tabla Driver (por JOINED)
+            String insertDriverSql = "INSERT INTO Driver (email) VALUES (?)";
+            em.createNativeQuery(insertDriverSql)
+              .setParameter(1, driver.getEmail())
+              .executeUpdate();
+
+            tx.commit();
+            System.out.println("Driver registered with SQL: " + driver.getEmail());
+
         } catch (RuntimeException e) {
             if (tx.isActive()) tx.rollback();
             throw e;
         } finally {
             em.close();
         }
+    }
+
+    public void createPassenger(Passenger passenger) {
+        EntityManager em = emf.createEntityManager();
+        EntityTransaction tx = em.getTransaction();
+
+        try {
+            tx.begin();
+
+            
+            String checkSql = "SELECT email FROM users WHERE email = ?";
+            List<?> result = em.createNativeQuery(checkSql)
+                               .setParameter(1, passenger.getEmail())
+                               .getResultList();
+
+            if (!result.isEmpty()) {
+                throw new RuntimeException("User with email " + passenger.getEmail() + " already exists.");
+            }
+
+           
+            String insertUserSql = "INSERT INTO users (email, name, pasahitza) VALUES (?, ?, ?)";
+            em.createNativeQuery(insertUserSql)
+              .setParameter(1, passenger.getEmail())
+              .setParameter(2, passenger.getName())
+              .setParameter(3, passenger.getPasahitza())
+              .executeUpdate();
+
+            String insertPassengerSql = "INSERT INTO passenger (email) VALUES (?)";
+            em.createNativeQuery(insertPassengerSql)
+              .setParameter(1, passenger.getEmail())
+              .executeUpdate();
+
+            tx.commit();
+            System.out.println("Passenger registered (SQL): " + passenger.getEmail());
+
+        } catch (RuntimeException e) {
+            if (tx.isActive()) tx.rollback();
+            throw e;
+        } finally {
+            em.close();
+        }
+    }
+
     
-    } 
+    
+    
 }

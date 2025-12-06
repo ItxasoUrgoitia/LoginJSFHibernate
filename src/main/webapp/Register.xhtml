@@ -5,7 +5,7 @@
       xmlns:p="http://primefaces.org/ui">
 
 <h:head>
-    <title>Login</title>
+    <title>Register</title>
 
     <style>
         .form-container {
@@ -65,7 +65,7 @@
 <div class="form-container">
 
     <h2 style="font-size: 24px; margin-bottom: 25px; color: #333; text-align:center;">
-        Login
+        Register
     </h2>
 
     <h:form>
@@ -76,7 +76,7 @@
                 <h:outputLabel for="email" value="Email" />
             </div>
             <div class="form-field">
-                <p:inputText id="email" value="#{login.email}"
+                <p:inputText id="email" value="#{register.email}"
                              placeholder="Enter your email" style="width:250px" />
             </div>
         </div>
@@ -87,28 +87,38 @@
                 <h:outputLabel for="password" value="Password" />
             </div>
             <div class="form-field">
-                <p:password id="password" value="#{login.pasahitza}"
+                <p:password id="password" value="#{register.pasahitza}"
                             feedback="false" style="width:250px" />
             </div>
         </div>
 
-        <!-- BUTTONS IN HORIZONTAL ROW -->
-        <div class="button-row">
+        <!-- USER TYPE DROPDOWN -->
+        <div class="form-row">
+            <div class="form-label">
+                <h:outputLabel for="userType" value="Register as" />
+            </div>
+            <div class="form-field">
+                <p:selectOneMenu id="userType" value="#{register.userType}" style="width:250px">
+                    <f:selectItem itemLabel="Select type" itemValue="" />
+                    <f:selectItem itemLabel="Driver" itemValue="Driver" />
+                    <f:selectItem itemLabel="Passenger" itemValue="Passenger" />
+                </p:selectOneMenu>
+            </div>
+        </div>
 
-            <p:commandButton value="Close"
+        <!-- BUTTONS -->
+        <div class="button-row">
+            <p:commandButton value="Cancel"
                              action="back"
                              styleClass="form-button" />
-
-            <p:commandButton value="Login"
-                             action="#{login.egiaztatu}"
+            <p:commandButton value="Register"
+                             action="#{register.registerUser}"
                              update="messages messageOutput"
                              styleClass="form-button" />
-
         </div>
 
         <p:messages id="messages" autoUpdate="true" />
-        <h:outputText id="messageOutput" value="#{login.message}" style="color:red; font-weight:bold; margin-top:15px;" />
-        
+        <h:outputText id="messageOutput" value="#{register.message}" style="color:red; font-weight:bold; margin-top:15px;" />
 
     </h:form>
 
