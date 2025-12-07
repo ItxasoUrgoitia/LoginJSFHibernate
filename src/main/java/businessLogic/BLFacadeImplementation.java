@@ -105,5 +105,16 @@ public class BLFacadeImplementation implements BLFacade {
 	public void createPassenger(Passenger pasenger) {
 		dbManager.createPassenger(pasenger);
 	}
+	
+	public boolean addCar(String licensePlate, int places, String model, String color, String driverEmail) {
+        return dbManager.addCar(licensePlate, places, model, color, driverEmail);
+    }
 
+	public boolean deleteUser(String email) {
+        return dbManager.deleteUser(email);
+    }
+	
+	public boolean userExists(String email) {
+        return dbManager.userExists(email);
+    }
 }

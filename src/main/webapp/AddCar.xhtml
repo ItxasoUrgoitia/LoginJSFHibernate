@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+    <title>Add Car</title>
+    <style>
+        .form-container {
+            max-width: 600px;
+            margin: 40px auto;
+            padding: 30px;
+            background-color: #f8f9fa;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        .form-title {
+            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 30px;
+            font-size: 28px;
+            font-weight: bold;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 10px;
+        }
+        
+        .form-row {
+            margin-bottom: 20px;
+        }
+        
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #34495e;
+            font-size: 14px;
+        }
+        
+        .form-input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #bdc3c7;
+            border-radius: 5px;
+            font-size: 14px;
+            transition: border-color 0.3s;
+        }
+        
+        .form-input:focus {
+            outline: none;
+            border-color: #3498db;
+            box-shadow: 0 0 5px rgba(52, 152, 219, 0.3);
+        }
+        
+        .button-container {
+            text-align: center;
+            margin-top: 30px;
+        }
+        
+        .btn-primary {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 5px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            margin-right: 10px;
+        }
+        
+        .btn-primary:hover {
+            background-color: #2980b9;
+        }
+        
+        .btn-secondary {
+            background-color: #95a5a6;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 5px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        .btn-secondary:hover {
+            background-color: #7f8c8d;
+        }
+        
+        .message-container {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 5px;
+            text-align: center;
+            font-weight: bold;
+        }
+        
+        .success-message {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        
+        .error-message {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        
+        .required-star {
+            color: #e74c3c;
+            margin-left: 3px;
+        }
+    </style>
+</h:head>
+
+<h:body>
+<div class="form-container">
+    <h2 class="form-title">Add New Car</h2>
+    
+    <h:form id="carForm">
+        
+        <!-- License Plate -->
+        <div class="form-row">
+            <h:outputLabel value="License Plate:" styleClass="form-label"/>
+            <span class="required-star">*</span>
+            <p:inputText value="#{addCarBean.licensePlate}" 
+                        styleClass="form-input"
+                        placeholder="Enter license plate (e.g., 1234ABC)"
+                        required="true"
+                        requiredMessage="License plate is required"/>
+        </div>
+        
+        <!-- Number of Places -->
+        <div class="form-row">
+            <h:outputLabel value="Number of Places:" styleClass="form-label"/>
+            <span class="required-star">*</span>
+            <p:inputNumber value="#{addCarBean.places}" 
+                         styleClass="form-input"
+                         minValue="1"
+                         placeholder="Enter number of seats"
+                         required="true"
+                         requiredMessage="Number of places is required"/>
+        </div>
+        
+        <!-- Model -->
+        <div class="form-row">
+            <h:outputLabel value="Model:" styleClass="form-label"/>
+            <span class="required-star">*</span>
+            <p:inputText value="#{addCarBean.model}" 
+                        styleClass="form-input"
+                        placeholder="Enter car model (e.g., Toyota Corolla)"
+                        required="true"
+                        requiredMessage="Model is required"/>
+        </div>
+        
+        <!-- Color -->
+        <div class="form-row">
+            <h:outputLabel value="Color:" styleClass="form-label"/>
+            <p:inputText value="#{addCarBean.color}" 
+                        styleClass="form-input"
+                        placeholder="Enter car color (optional)"/>
+        </div>
+        
+        <!-- Driver Email -->
+        <div class="form-row">
+            <h:outputLabel value="Driver Email:" styleClass="form-label"/>
+            <span class="required-star">*</span>
+            <p:inputText value="#{addCarBean.driverEmail}" 
+                        styleClass="form-input"
+                        placeholder="Enter driver's email"
+                        required="true"
+                        requiredMessage="Driver email is required"/>
+        </div>
+        
+        <!-- Buttons -->
+        <div class="button-container">
+            <p:commandButton value="Add Car" 
+                           action="#{addCarBean.addCar}"
+                           styleClass="btn-primary"
+                           update="carForm messages"
+                           process="@form"/>
+            
+            <p:button value="Back to Menu" 
+                     outcome="Hasiera.xhtml"
+                     styleClass="btn-secondary"/>
+        </div>
+        
+        <!-- Messages -->
+        <p:messages id="messages" showDetail="true" autoUpdate="true" />
+        
+        <!-- Success Message -->
+        <h:panelGroup rendered="#{addCarBean.success}">
+            <div class="message-container success-message">
+                <p>#{addCarBean.message}</p>
+                <p>Car has been successfully added to the system.</p>
+            </div>
+        </h:panelGroup>
+        
+    </h:form>
+</div>
+</h:body>
+</html>

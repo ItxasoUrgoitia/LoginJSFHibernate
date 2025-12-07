@@ -6,6 +6,7 @@ import java.util.Date;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
@@ -17,7 +18,7 @@ import jakarta.persistence.ManyToOne;
 @Entity
 public class Ride implements Serializable {
 	@Id 
-	@GeneratedValue
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer rideNumber;
 	@Column(name = "origin")
 	private String from;
@@ -26,6 +27,7 @@ public class Ride implements Serializable {
 	private int nPlaces;
 	private Date date;
 	private float price;
+	private boolean cancelled = false;
 	
 	@ManyToOne
 	@JoinColumn(name = "driver_email")
@@ -190,7 +192,13 @@ public class Ride implements Serializable {
 	}
 
 
-
+	public boolean isCancelled() {
+        return cancelled;
+    }
+    
+    public void setCancelled(boolean cancelled) {
+        this.cancelled = cancelled;
+    }
 
 	
 }

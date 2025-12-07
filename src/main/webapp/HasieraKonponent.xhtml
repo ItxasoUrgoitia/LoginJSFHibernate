@@ -3,6 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
 	xmlns:f="http://java.sun.com/jsf/core">
 <ui:composition>
 <f:view>
@@ -15,7 +16,13 @@
 
 			<h:commandButton value="Create Ride" action="1" />
 			<h:commandButton value="Query Rides" action="2" />
-
+			<p:commandButton value="Add Car" 
+                 action="AddCar" 
+                 styleClass="menu-button"/>
+            <p:commandButton value="Delete User"
+                 action="DeleteUser"
+                styleClass="menu-button"
+                style="background-color: #e74c3c !important;" />
 		</h:form>
 	</h:body>
 </f:view>

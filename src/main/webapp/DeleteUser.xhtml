@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://xmlns.jcp.org/jsf/html"
+    xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+<h:head>
+    <title>Delete User - Ride Sharing</title>
+    <style>
+        .form-container {
+            max-width: 600px;
+            margin: 40px auto;
+            padding: 30px;
+            background-color: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            border: 1px solid #e9ecef;
+        }
+        
+        .form-title {
+            text-align: center;
+            color: #e74c3c;
+            margin-bottom: 25px;
+            font-size: 26px;
+            font-weight: 600;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #f8f9fa;
+        }
+        
+        .warning-box {
+            background-color: #fff8e6;
+            border: 1px solid #ffd166;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 25px;
+            color: #856404;
+            font-size: 14px;
+        }
+        
+        .warning-icon {
+            color: #e74c3c;
+            font-size: 22px;
+            margin-right: 10px;
+            vertical-align: middle;
+        }
+        
+        .form-row {
+            margin-bottom: 24px;
+        }
+        
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #495057;
+            font-size: 14px;
+        }
+        
+        .form-input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            font-size: 15px;
+            transition: all 0.3s;
+            box-sizing: border-box;
+        }
+        
+        .form-input:focus {
+            outline: none;
+            border-color: #e74c3c;
+            box-shadow: 0 0 0 3px rgba(231, 76, 60, 0.1);
+        }
+        
+        .form-input:disabled {
+            background-color: #f8f9fa;
+            color: #6c757d;
+            cursor: not-allowed;
+        }
+        
+        .button-container {
+            text-align: center;
+            margin-top: 35px;
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .btn-danger {
+            background: linear-gradient(to right, #e74c3c, #c0392b);
+            color: white;
+            border: none;
+            padding: 14px 32px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            min-width: 140px;
+        }
+        
+        .btn-danger:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(231, 76, 60, 0.3);
+        }
+        
+        .btn-secondary {
+            background: linear-gradient(to right, #6c757d, #495057);
+            color: white;
+            border: none;
+            padding: 14px 32px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            min-width: 140px;
+        }
+        
+        .btn-secondary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(108, 117, 125, 0.3);
+        }
+        
+        .btn-cancel {
+            background: linear-gradient(to right, #3498db, #2980b9);
+            color: white;
+            border: none;
+            padding: 14px 32px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+            min-width: 140px;
+        }
+        
+        .btn-cancel:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(52, 152, 219, 0.3);
+        }
+        
+        .message-container {
+            margin-top: 25px;
+            padding: 18px;
+            border-radius: 8px;
+            text-align: center;
+            font-weight: 600;
+            font-size: 15px;
+        }
+        
+        .success-message {
+            background: linear-gradient(to right, #d4edda, #c3e6cb);
+            color: #155724;
+            border: 1px solid #b1dfbb;
+        }
+        
+        .error-message {
+            background: linear-gradient(to right, #f8d7da, #f5c6cb);
+            color: #721c24;
+            border: 1px solid #f1b0b7;
+        }
+        
+        .info-message {
+            background: linear-gradient(to right, #e8f4f8, #d1ecf1);
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 8px;
+        }
+        
+        .required-star {
+            color: #e74c3c;
+            margin-left: 3px;
+        }
+        
+        .error-message-text {
+            color: #e74c3c;
+            font-size: 13px;
+            margin-top: 5px;
+            display: block;
+        }
+        
+        .confirmation-section {
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: 20px;
+            border: 1px dashed #dee2e6;
+        }
+        
+        ul {
+            padding-left: 20px;
+            margin: 10px 0;
+        }
+        
+        li {
+            margin-bottom: 8px;
+            line-height: 1.5;
+        }
+        
+        .email-display {
+            background-color: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 6px;
+            padding: 10px 15px;
+            margin: 15px 0;
+            font-weight: 600;
+            color: #495057;
+        }
+    </style>
+</h:head>
+
+<h:body>
+    <div class="form-container">
+        <h2 class="form-title">⚠ Delete User Account</h2>
+        
+        <div class="warning-box">
+            <p><span class="warning-icon">⚠</span> <strong>Warning:</strong> This action cannot be undone.</p>
+            <p>Deleting a user account will:</p>
+            <ul>
+                <li>Cancel all future rides if the user is a driver</li>
+                <li>Remove all associated cars if the user is a driver</li>
+                <li>Permanently delete the user profile</li>
+            </ul>
+        </div>
+        
+        <h:form id="deleteForm">
+            
+            <!-- Email Input -->
+            <div class="form-row">
+                <label class="form-label">Email to delete: <span class="required-star">*</span></label>
+                <h:inputText value="#{deleteUserBean.email}" 
+                            styleClass="form-input"
+                            placeholder="Enter the email address"
+                            required="true"
+                            requiredMessage="Email is required"
+                            id="emailInput"
+                            disabled="#{deleteUserBean.showConfirmation}">
+                    <f:ajax event="blur" render="emailMessage"/>
+                </h:inputText>
+                <h:message id="emailMessage" for="emailInput" styleClass="error-message-text"/>
+            </div>
+            
+            <!-- Check User Button -->
+            <h:panelGroup rendered="#{not deleteUserBean.showConfirmation}">
+                <div class="button-container">
+                    <h:commandButton value="Check User" 
+                                   action="#{deleteUserBean.checkUser}"
+                                   styleClass="btn-secondary">
+                        <f:ajax execute="@form" render="@form messages"/>
+                    </h:commandButton>
+                    
+                    <h:button value="Back to Menu" 
+                             outcome="Hasiera.xhtml"
+                             styleClass="btn-cancel"/>
+                </div>
+            </h:panelGroup>
+            
+            <!-- Confirmation Section -->
+            <h:panelGroup rendered="#{deleteUserBean.showConfirmation}">
+                <div class="confirmation-section">
+                    <div class="form-row">
+                        <label class="form-label">Confirm email: <span class="required-star">*</span></label>
+                        <h:inputText value="#{deleteUserBean.confirmationEmail}" 
+                                    styleClass="form-input"
+                                    placeholder="Type the email again to confirm"
+                                    required="true"
+                                    requiredMessage="Please confirm the email"
+                                    id="confirmInput">
+                            <f:ajax event="blur" render="confirmMessage"/>
+                        </h:inputText>
+                        <h:message id="confirmMessage" for="confirmInput" styleClass="error-message-text"/>
+                    </div>
+                    
+                    <div class="email-display">
+                        Email to delete: <strong>#{deleteUserBean.email}</strong>
+                    </div>
+                    
+                    <div class="info-message">
+                        <p>⚠ Please type the email again to confirm deletion.</p>
+                    </div>
+                </div>
+                
+                <div class="button-container">
+                    <h:commandButton value="Delete User" 
+                                   action="#{deleteUserBean.deleteUser}"
+                                   styleClass="btn-danger"
+                                   onclick="return confirm('Are you sure you want to permanently delete this user? This action cannot be undone.');">
+                        <f:ajax execute="@form" render="@form messages"/>
+                    </h:commandButton>
+                    
+                    <h:commandButton value="Cancel" 
+                                   action="#{deleteUserBean.cancel}"
+                                   styleClass="btn-secondary">
+                        <f:ajax execute="@this" render="@form"/>
+                    </h:commandButton>
+                    
+                    <h:button value="Back to Menu" 
+                             outcome="Hasiera.xhtml"
+                             styleClass="btn-cancel"/>
+                </div>
+            </h:panelGroup>
+            
+            <!-- Messages -->
+            <h:messages id="messages" globalOnly="false" showDetail="true" 
+                       errorClass="error-message" 
+                       infoClass="success-message" 
+                       warnClass="info-message"/>
+            
+            <!-- Success Message -->
+            <h:panelGroup rendered="#{deleteUserBean.success}">
+                <div class="success-message message-container">
+                    <p>#{deleteUserBean.message}</p>
+                    <p>The user account has been permanently deleted from the system.</p>
+                </div>
+            </h:panelGroup>
+            
+        </h:form>
+    </div>
+</h:body>
+</html>

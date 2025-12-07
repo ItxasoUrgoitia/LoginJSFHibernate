@@ -82,5 +82,10 @@ public interface BLFacade  {
 	 public void createDriver(Driver driver);
 	 
 	 public void createPassenger(Passenger passenger);
+	 
+	 public boolean addCar(String licensePlate, int places, String model, String color, String driverEmail);
 	
+	 public boolean deleteUser(String email);
+	 
+	 public boolean userExists(String email);
 }

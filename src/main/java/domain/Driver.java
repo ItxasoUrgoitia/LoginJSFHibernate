@@ -10,16 +10,19 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.PrimaryKeyJoinColumn;
 
 
 @Entity
+@PrimaryKeyJoinColumn(name = "email")
 public class Driver extends User implements Serializable {
-	
-	private static final long serialVersionUID = 1L;
-	
-	@OneToMany(mappedBy = "driver", fetch=FetchType.EAGER, cascade=CascadeType.PERSIST)
-	private List<Ride> rides=new Vector<Ride>();
+    
+    @OneToMany(mappedBy = "driver", fetch=FetchType.EAGER, cascade=CascadeType.ALL, orphanRemoval = true)
+    private List<Ride> rides=new Vector<Ride>();
 
+	@OneToMany(mappedBy = "driver", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    private List<Car> cars = new Vector<Car>();
+	
 	public Driver() {}
 
 	public Driver(String email, String name, String pasahitza) {
@@ -65,5 +68,29 @@ public class Driver extends User implements Serializable {
 		this.rides = rides;
 	}
 	
+	public Car addCar(String licensePlate, int places, String model, String color) {
+        Car car = new Car(licensePlate, places, model, color, this);
+        cars.add(car);
+        return car;
+    }
+    
+    public boolean doesCarExist(String licensePlate) {
+        for (Car c : cars) {
+            if (c.getLicensePlate().equals(licensePlate)) {
+                return true;
+            }
+        }
+        return false;
+    }
+    
+ 
+    
+    public List<Car> getCars() {
+        return cars;
+    }
+    
+    public void setCars(List<Car> cars) {
+        this.cars = cars;
+    }
 	
 }

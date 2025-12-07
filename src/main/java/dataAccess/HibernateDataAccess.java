@@ -1,10 +1,10 @@
 package dataAccess;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-
-
+import domain.Car;
 import domain.Driver;
 import domain.Passenger;
 import domain.Ride;
@@ -253,6 +253,106 @@ public class HibernateDataAccess {
     }
 
     
+    public boolean addCar(String licensePlate, int places, String model, String color, String driverEmail) {
+        EntityManager em = emf.createEntityManager();
+        EntityTransaction tx = em.getTransaction();
+        
+        try {
+            tx.begin();
+            
+            Driver driver = em.find(Driver.class, driverEmail);
+            if (driver == null) {
+                System.out.println("Driver no encontrado: " + driverEmail);
+                tx.rollback();
+                return false;
+            }
+            
+            if (driver.doesCarExist(licensePlate)) {
+                System.out.println("Car already exists: " + licensePlate);
+                tx.rollback();
+                return false;
+            }
+            
+            Car car = driver.addCar(licensePlate, places, model, color);
+            em.persist(car);
+            
+            driver.getCars().add(car);
+            em.merge(driver);
+            
+            tx.commit();
+            System.out.println("Car added successfully: " + licensePlate);
+            return true;
+            
+        } catch (RuntimeException e) {
+            if (tx.isActive()) tx.rollback();
+            e.printStackTrace();
+            return false;
+        } finally {
+            em.close();
+        }
+    }
     
-    
+    public boolean deleteUser(String email) {
+        EntityManager em = emf.createEntityManager();
+        EntityTransaction tx = null;
+        
+        try {
+            tx = em.getTransaction();
+            tx.begin();
+            
+            // Delete all rides for the driver
+            em.createNativeQuery("DELETE FROM Ride WHERE driver_email = ?")
+              .setParameter(1, email)
+              .executeUpdate();
+            
+            // Delete cars
+            em.createNativeQuery("DELETE FROM Car WHERE driver_email = ?")
+              .setParameter(1, email)
+              .executeUpdate();
+            
+            // Delete from Passenger
+            em.createNativeQuery("DELETE FROM Passenger WHERE email = ?")
+              .setParameter(1, email)
+              .executeUpdate();
+            
+            // Delete from Driver
+            em.createNativeQuery("DELETE FROM Driver WHERE email = ?")
+              .setParameter(1, email)
+              .executeUpdate();
+            
+            // Finally delete from users
+            em.createNativeQuery("DELETE FROM users WHERE email = ?")
+              .setParameter(1, email)
+              .executeUpdate();
+            
+            tx.commit();
+            
+            // Verify deletion
+            List<?> remaining = em.createNativeQuery("SELECT email FROM users WHERE email = ?")
+                                 .setParameter(1, email)
+                                 .getResultList();
+            
+            return remaining.isEmpty();
+            
+        } catch (Exception e) {
+            if (tx != null && tx.isActive()) {
+                tx.rollback();
+            }
+            return false;
+        } finally {
+            em.close();
+        }
+    }
+
+    public boolean userExists(String email) {
+        EntityManager em = emf.createEntityManager();
+        try {
+            User user = em.find(User.class, email);
+            return user != null;
+        } catch (Exception e) {
+            return false;
+        } finally {
+            em.close();
+        }
+    }
 }
