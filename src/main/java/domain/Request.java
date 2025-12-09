@@ -81,4 +81,11 @@ public class Request implements Serializable {
 
     public Passenger getPassenger() { return passenger; }
     public void setPassenger(Passenger passenger) { this.passenger = passenger; }
+
+    @Override
+    public String toString() {
+        return "Request [id=" + reqNumber + ", passenger=" + passenger.getName() + 
+               ", ride=" + ride.getFrom() + "→" + ride.getTo() + 
+               ", status=" + egoera + "]";
+    }
 }

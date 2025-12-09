@@ -1,24 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>org.is2.frameworks</groupId>
-	<artifactId>LoginJSF2</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	
+	<!-- CAMBIA ESTO: usa tu propio grupo y artefacto -->
+	<groupId>com.rides</groupId>
+	<artifactId>Rides24</artifactId>
+	<version>1.0.0</version>
 	<packaging>war</packaging>
-	<name>LoginJSF2</name>
+	<name>Rides24 Application</name>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<maven.compiler.source>11</maven.compiler.source>
 		<maven.compiler.target>11</maven.compiler.target>
+		<jakarta.faces.version>3.0.0</jakarta.faces.version>
+		<primefaces.version>12.0.0</primefaces.version>
+		<hibernate.version>6.3.0.Final</hibernate.version>
+		<h2.version>2.2.224</h2.version>
 	</properties>
+	
 	<dependencies>
 		<!-- JSF API -->
 		<dependency>
 			<groupId>org.glassfish</groupId>
 			<artifactId>jakarta.faces</artifactId>
-			<version>3.0.0</version>
+			<version>${jakarta.faces.version}</version>
 		</dependency>
 
 		<!-- Servlet API -->
@@ -34,10 +42,10 @@
     		<groupId>jakarta.enterprise</groupId>
     		<artifactId>jakarta.enterprise.cdi-api</artifactId>
     		<version>3.0.0</version>
+    		<scope>provided</scope>
 		</dependency>
 
-
-		<!-- Weld (ImplementaciÃ³n de CDI) - ESTA ES LA QUE FALTA -->
+		<!-- Weld (Implementación de CDI) -->
 		<dependency>
     		<groupId>org.jboss.weld.servlet</groupId>
     		<artifactId>weld-servlet-shaded</artifactId>
@@ -51,84 +59,137 @@
 			<version>2.0.0</version>
 		</dependency>
 
+		<!-- PrimeFaces -->
 		<dependency>
 			<groupId>org.primefaces</groupId>
 			<artifactId>primefaces</artifactId>
-			<version>12.0.0</version>
+			<version>${primefaces.version}</version>
 			<classifier>jakarta</classifier>
 		</dependency>
 
+		<!-- Omnifaces (opcional pero útil) -->
 		<dependency>
 			<groupId>org.omnifaces</groupId>
 			<artifactId>omnifaces</artifactId>
 			<version>4.0.1</version>
 		</dependency>
 
+		<!-- Validation API -->
 		<dependency>
 			<groupId>jakarta.validation</groupId>
 			<artifactId>jakarta.validation-api</artifactId>
-			<version>3.0.2
-			</version>
+			<version>3.0.2</version>
 		</dependency>
-
-
-		<!--<dependency><groupId>1.0</groupId><artifactId>Rides24</artifactId><version>0.0.1-SNAPSHOT</version></dependency>-->
 
 		<!-- Hibernate ORM -->
-<dependency>
-    <groupId>org.hibernate.orm</groupId>
-    <artifactId>hibernate-core</artifactId>
-    <version>6.3.0.Final</version>
-</dependency>
-
-		<!-- H2 en memoria -->
-<dependency>
-    <groupId>com.h2database</groupId>
-    <artifactId>h2</artifactId>
-    <version>2.2.224</version>
-</dependency>
-<dependency>
-    <groupId>jakarta.persistence</groupId>
-    <artifactId>jakarta.persistence-api</artifactId>
-    <version>3.1.0</version>
-</dependency>
-<dependency>
-    <groupId>jakarta.xml.bind</groupId>
-    <artifactId>jakarta.xml.bind-api</artifactId>
-    <version>4.0.1</version>
-</dependency>
-
-<dependency>
-    <groupId>org.glassfish.jaxb</groupId>
-    <artifactId>jaxb-runtime</artifactId>
-    <version>4.0.4</version>
-</dependency>
 		<dependency>
-			<groupId>1.0</groupId>
-			<artifactId>Rides24</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
+		    <groupId>org.hibernate.orm</groupId>
+		    <artifactId>hibernate-core</artifactId>
+		    <version>${hibernate.version}</version>
+		</dependency>
+
+		<!-- H2 Database -->
+		<dependency>
+		    <groupId>com.h2database</groupId>
+		    <artifactId>h2</artifactId>
+		    <version>${h2.version}</version>
+		</dependency>
+		
+		<!-- JPA API -->
+		<dependency>
+		    <groupId>jakarta.persistence</groupId>
+		    <artifactId>jakarta.persistence-api</artifactId>
+		    <version>3.1.0</version>
+		</dependency>
+		
+		<!-- JAXB API (para XML binding) -->
+		<dependency>
+		    <groupId>jakarta.xml.bind</groupId>
+		    <artifactId>jakarta.xml.bind-api</artifactId>
+		    <version>4.0.1</version>
+		</dependency>
+
+		<!-- JAXB Runtime -->
+		<dependency>
+		    <groupId>org.glassfish.jaxb</groupId>
+		    <artifactId>jaxb-runtime</artifactId>
+		    <version>4.0.4</version>
+		</dependency>
+		
+		<!-- Hibernate JPA Metamodel Generator (opcional) -->
+		<dependency>
+		    <groupId>org.hibernate.orm</groupId>
+		    <artifactId>hibernate-jpamodelgen</artifactId>
+		    <version>${hibernate.version}</version>
+		    <scope>provided</scope>
+		</dependency>
+		
+		<!-- Logging (SLF4J + Logback) -->
+		<dependency>
+		    <groupId>org.slf4j</groupId>
+		    <artifactId>slf4j-api</artifactId>
+		    <version>2.0.9</version>
+		</dependency>
+		<dependency>
+		    <groupId>ch.qos.logback</groupId>
+		    <artifactId>logback-classic</artifactId>
+		    <version>1.4.11</version>
+		</dependency>
+		
+		<!-- JUnit para testing -->
+		<dependency>
+		    <groupId>org.junit.jupiter</groupId>
+		    <artifactId>junit-jupiter-api</artifactId>
+		    <version>5.10.0</version>
+		    <scope>test</scope>
 		</dependency>
 	</dependencies>
-	
-	
 
 	<build>
+		<finalName>Rides24</finalName>
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.8.1</version>
+				<version>3.11.0</version>
 				<configuration>
-					<source>11</source>
-					<target>11</target>
+					<source>${maven.compiler.source}</source>
+					<target>${maven.compiler.target}</target>
+					<annotationProcessorPaths>
+						<path>
+							<groupId>org.hibernate.orm</groupId>
+							<artifactId>hibernate-jpamodelgen</artifactId>
+							<version>${hibernate.version}</version>
+						</path>
+					</annotationProcessorPaths>
 				</configuration>
 			</plugin>
+			
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-war-plugin</artifactId>
-				<version>3.3.2</version>
+				<version>3.4.0</version>
 				<configuration>
 					<failOnMissingWebXml>false</failOnMissingWebXml>
+					<webResources>
+						<resource>
+							<directory>src/main/webapp</directory>
+						</resource>
+					</webResources>
+				</configuration>
+			</plugin>
+			
+			<!-- Plugin para limpiar caché si es necesario -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-clean-plugin</artifactId>
+				<version>3.3.1</version>
+				<configuration>
+					<filesets>
+						<fileset>
+							<directory>target</directory>
+						</fileset>
+					</filesets>
 				</configuration>
 			</plugin>
 		</plugins>

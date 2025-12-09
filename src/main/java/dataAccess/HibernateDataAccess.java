@@ -483,5 +483,90 @@ public class HibernateDataAccess {
 			em.close();
 		}
 	}
+	
+	public List<Request> getDriverRequests(String driverEmail) {
+	    EntityManager em = emf.createEntityManager();
+	    try {
+	        // Driver baten rides guztien request-ak lortu
+	        String query = "SELECT r FROM Request r " +
+	                      "WHERE r.ride.driver.email = :driverEmail " +
+	                      "ORDER BY r.requestDate DESC";
+	        return em.createQuery(query, Request.class)
+	                 .setParameter("driverEmail", driverEmail)
+	                 .getResultList();
+	    } finally {
+	        em.close();
+	    }
+	}
+
+	public boolean acceptRequest(Integer requestId) {
+	    EntityManager em = emf.createEntityManager();
+	    EntityTransaction tx = em.getTransaction();
+	    
+	    try {
+	        tx.begin();
+	        
+	        Request request = em.find(Request.class, requestId);
+	        if (request == null) {
+	            tx.rollback();
+	            return false;
+	        }
+	     // Egoera aldatu
+	        request.setEgoera(Request.EskaeraEgoera.ACCEPTED);
+	        
+	        // Ride-aren plaza kopurua eguneratu
+	        Ride ride = request.getRide();
+	        ride.setnPlaces(ride.getnPlaces() - request.getSeatsRequested());
+	        
+	        em.merge(request);
+	        em.merge(ride);
+	        
+	        tx.commit();
+	        return true;
+	        
+	    } catch (RuntimeException e) {
+	        if (tx.isActive()) tx.rollback();
+	        e.printStackTrace();
+	        return false;
+	    } finally {
+	        em.close();
+	    }
+	}
+	
+	public boolean rejectRequest(Integer requestId) {
+	    EntityManager em = emf.createEntityManager();
+	    EntityTransaction tx = em.getTransaction();
+	    
+	    try {
+	        tx.begin();
+	        
+	        Request request = em.find(Request.class, requestId);
+	        if (request == null) {
+	            tx.rollback();
+	            return false;
+	        }
+	        
+	        // Egoera aldatu
+	        request.setEgoera(Request.EskaeraEgoera.REJECTED);
+	        
+	        // Passenger-en dirua itzuli (aukerakoa)
+	        Passenger passenger = request.getPassenger();
+	        passenger.setMoney(passenger.getMoney() + request.getTotalPrice());
+	        
+	        em.merge(request);
+	        em.merge(passenger);
+	        
+	        tx.commit();
+	        return true;
+	        
+	    } catch (RuntimeException e) {
+	        if (tx.isActive()) tx.rollback();
+	        e.printStackTrace();
+	        return false;
+	    } finally {
+	        em.close();
+	    }
+	    
+	}
 
 }

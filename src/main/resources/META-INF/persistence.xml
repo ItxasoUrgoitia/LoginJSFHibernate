@@ -12,6 +12,8 @@
         <class>domain.User</class>
         <class>domain.Passenger</class>
         <class>domain.Car</class>
+        <class>domain.Request</class>
+        
 
         <properties>
             <!-- Configuración de H2 en memoria (sin prefijo) -->

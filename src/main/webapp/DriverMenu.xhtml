@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+<h:head>
+    <title>Driver Menu</title>
+    <style>
+        .menu-container {
+            max-width: 600px;
+            margin: 50px auto;
+            text-align: center;
+        }
+        .menu-button {
+            display: block;
+            margin: 15px auto;
+            padding: 15px 30px;
+            width: 300px;
+            font-size: 16px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+        }
+        .menu-button:hover {
+            background-color: #0056b3;
+        }
+        .requests-button {
+            background-color: #28a745;
+        }
+        .requests-button:hover {
+            background-color: #1e7e34;
+        }
+    </style>
+</h:head>
+<h:body>
+    <div class="menu-container">
+        <h2>Driver Menu</h2>
+        <p>Welcome, Driver!</p>
+        
+        <h:form>
+            <p:commandButton value="Create Ride" action="CreateRide.xhtml?faces-redirect=true" 
+                           styleClass="menu-button" />
+            
+            <p:commandButton value="See Ride Requests" action="seeRequests.xhtml?faces-redirect=true" 
+                           styleClass="menu-button requests-button" />
+            
+            <p:commandButton value="Add Car" action="AddCar.xhtml?faces-redirect=true" 
+                           styleClass="menu-button" />
+            
+            <p:commandButton value="Logout" action="#{login.logout}" 
+                           styleClass="menu-button" style="background-color:#6c757d;" />
+        </h:form>
+    </div>
+</h:body>
+</html>

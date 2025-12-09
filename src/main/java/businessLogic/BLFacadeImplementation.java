@@ -10,6 +10,7 @@ import domain.User;
 import domain.Car;
 import domain.Driver;
 import domain.Passenger;
+import domain.Request;
 import exceptions.RideMustBeLaterThanTodayException;
 import exceptions.DriverDoesNotExistException;
 import exceptions.RideAlreadyExistException;
@@ -142,4 +143,19 @@ public class BLFacadeImplementation implements BLFacade {
 		 return dbManager.getRideById(id);
 	 }
 	
+	 @Override
+	 public List<Request> getDriverRequests(String driverEmail) {
+	     return dbManager.getDriverRequests(driverEmail);
+	 }
+
+	 @Override
+	 public boolean acceptRequest(Integer requestId) {
+	     return dbManager.acceptRequest(requestId);
+	 }
+
+	 @Override
+	 public boolean rejectRequest(Integer requestId) {
+	     return dbManager.rejectRequest(requestId);
+	 }
+	 
 }

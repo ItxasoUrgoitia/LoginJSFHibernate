@@ -18,6 +18,7 @@ import jakarta.faces.application.FacesMessage;
 import jakarta.faces.context.FacesContext;
 import jakarta.faces.event.AjaxBehaviorEvent;
 import jakarta.inject.Named;
+import jakarta.servlet.http.HttpSession;
 
 @Named("login")
 @RequestScoped
@@ -88,19 +89,41 @@ public class LoginBean implements Serializable {
 	        return null;
 	    }
 
-	    // Reconocer tipo de usuario
+	    // Guardar en sesión
+	    FacesContext context = FacesContext.getCurrentInstance();
+	    HttpSession session = (HttpSession) context.getExternalContext().getSession(true);
+	    
+	    // Guardar email
+	    session.setAttribute("userEmail", email);
+	    
+	    // Guardar tipo de usuario - IMPORTANTE: usar getSimpleName()
+	    String userType = u.getClass().getSimpleName();
+	    session.setAttribute("userType", userType);
+	    
+	    // Guardar nombre para mostrar
+	    session.setAttribute("userName", u.getName());
+	    
+	    System.out.println(">>> Login successful - Email: " + email + ", Type: " + userType);
+
 	    if (u instanceof Driver) {
-	        System.out.println("Logged in as Driver");
-	        return "CreateRide.xhtml?faces-redirect=true";
+	        System.out.println(">>> Redirecting to DriverMenu");
+	        return "DriverMenu.xhtml?faces-redirect=true";
 	    } else if (u instanceof Passenger) {
-	        System.out.println("Logged in as Passenger");
-	        return "QueryRides.xhtml?faces-redirect=true";
+	        System.out.println(">>> Redirecting to PassengerMenu");
+	        return "PassengerMenu.xhtml?faces-redirect=true";
 	    }
 
 	    return null;
 	}
 
-	
+	public String logout() {
+	    FacesContext context = FacesContext.getCurrentInstance();
+	    HttpSession session = (HttpSession) context.getExternalContext().getSession(false);
+	    if (session != null) {
+	        session.invalidate();
+	    }
+	    return "login.xhtml?faces-redirect=true";
+	}
 	
 
 }

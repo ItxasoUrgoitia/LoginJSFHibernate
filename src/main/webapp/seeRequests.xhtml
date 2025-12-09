@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+<h:head>
+    <title>See Ride Requests</title>
+    <style>
+        .container {
+            max-width: 1200px;
+            margin: 30px auto;
+            padding: 20px;
+        }
+        .header {
+            margin-bottom: 30px;
+            border-bottom: 2px solid #007bff;
+            padding-bottom: 10px;
+        }
+        .request-table {
+            width: 100%;
+            margin-top: 20px;
+            border-collapse: collapse;
+        }
+        .request-table th {
+            background-color: #f8f9fa;
+            padding: 12px;
+            text-align: left;
+            border-bottom: 2px solid #dee2e6;
+        }
+        .request-table td {
+            padding: 10px;
+            border-bottom: 1px solid #e9ecef;
+        }
+        .request-table tr:hover {
+            background-color: #f5f5f5;
+        }
+        .status-badge {
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        .status-pending {
+            background-color: #fff3cd;
+            color: #856404;
+        }
+        .status-accepted {
+            background-color: #d4edda;
+            color: #155724;
+        }
+        .status-rejected {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+        .error-message {
+            background-color: #f8d7da;
+            color: #721c24;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 5px;
+            border: 1px solid #f5c6cb;
+        }
+        .success-message {
+            background-color: #d4edda;
+            color: #155724;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 5px;
+            border: 1px solid #c3e6cb;
+        }
+        .no-requests {
+            text-align: center;
+            padding: 40px;
+            color: #6c757d;
+            font-style: italic;
+        }
+    </style>
+</h:head>
+<h:body>
+    <div class="container">
+        <div class="header">
+            <h2>📋 My Ride Requests</h2>
+        </div>
+        
+        <h:form id="form">
+            <!-- Si no es driver -->
+            <h:panelGroup rendered="#{not seeRequestsBean.driverLoggedIn}">
+                <div class="error-message">
+                    <h3>⚠️ Access Restricted</h3>
+                    <p>Only drivers can see ride requests.</p>
+                    <p:commandButton value="Go to Login" 
+                                   action="login.xhtml?faces-redirect=true" />
+                </div>
+            </h:panelGroup>
+            
+            <!-- Si es driver -->
+            <h:panelGroup rendered="#{seeRequestsBean.driverLoggedIn}">
+                <div class="success-message">
+                    <h3>✅ Welcome Driver!</h3>
+                    <p>You are logged in as: <strong>#{seeRequestsBean.driverEmail}</strong></p>
+                </div>
+                
+                <p:commandButton value="🔄 Refresh Requests" 
+                               action="#{seeRequestsBean.loadDriverRequests}" 
+                               update="form" 
+                               style="margin-bottom: 20px;" />
+                
+                <!-- Tabla de requests -->
+                <h:panelGroup rendered="#{not empty seeRequestsBean.driverRequests}">
+                    <p:dataTable id="requestsTable" 
+                               value="#{seeRequestsBean.driverRequests}" 
+                               var="req"
+                               styleClass="request-table"
+                               paginator="true"
+                               rows="10"
+                               paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                               rowsPerPageTemplate="5,10,20">
+                        
+                        <p:column headerText="Request #" width="80" sortBy="#{req.reqNumber}">
+                            <h:outputText value="#{req.reqNumber}" />
+                        </p:column>
+                        
+                        <p:column headerText="Passenger" width="200">
+                            <div class="passenger-info">
+                                <strong>#{req.passenger.email}</strong>
+                            </div>
+                        </p:column>
+                        
+                        <p:column headerText="Ride" width="300">
+                            <div class="ride-info">
+                                #{req.ride.from} → #{req.ride.to}
+                            </div>
+                            <div class="date-info">
+                                Date: #{req.ride.date}
+                                <br/>
+                                Price per seat: #{req.ride.price} €
+                            </div>
+                        </p:column>
+                        
+                        <p:column headerText="Details" width="150">
+                            Seats: <strong>#{req.seatsRequested}</strong>
+                            <br/>
+                            Total: <strong>#{req.totalPrice} €</strong>
+                        </p:column>
+                        
+                        <p:column headerText="Status" width="120" sortBy="#{req.egoera}">
+                            <div class="status-badge status-#{req.egoera.toString().toLowerCase()}">
+                                #{req.egoera}
+                            </div>
+                        </p:column>
+                        
+                        <p:column headerText="Actions" width="200">
+                            <h:panelGroup rendered="#{req.egoera.toString() eq 'PENDING'}">
+                                <p:commandButton value="Accept" 
+                                               action="#{seeRequestsBean.acceptRequest(req.reqNumber)}"
+                                               update="form"
+                                               style="margin-right: 5px;" />
+                                <p:commandButton value="Reject" 
+                                               action="#{seeRequestsBean.rejectRequest(req.reqNumber)}"
+                                               update="form" />
+                            </h:panelGroup>
+                            <h:panelGroup rendered="#{req.egoera.toString() ne 'PENDING'}">
+                                <span style="color: #6c757d; font-style: italic;">
+                                    #{req.egoera.toString() eq 'ACCEPTED' ? '✓ Accepted' : '✗ Rejected'}
+                                </span>
+                            </h:panelGroup>
+                        </p:column>
+                    </p:dataTable>
+                </h:panelGroup>
+                
+                <!-- Sin requests -->
+                <h:panelGroup rendered="#{empty seeRequestsBean.driverRequests}">
+                    <div class="no-requests">
+                        <h3>📭 No ride requests found</h3>
+                        <p>When passengers request seats on your rides, they will appear here.</p>
+                    </div>
+                </h:panelGroup>
+                
+                <p:commandButton value="Back to Menu" 
+                               action="DriverMenu.xhtml?faces-redirect=true" 
+                               style="margin-top: 20px;" />
+            </h:panelGroup>
+            
+            <p:messages autoUpdate="true" />
+        </h:form>
+    </div>
+</h:body>
+</html>

@@ -97,5 +97,11 @@ public interface BLFacade  {
 	 public boolean createRequest(String passengerEmail, Integer rideNumber, int seatsRequested);
 	 
 	 public Ride getRideById(Integer id);
+	 
+	 public List<Request> getDriverRequests(String driverEmail);
+	 
+	 public boolean acceptRequest(Integer requestId);
+	 
+	 public boolean rejectRequest(Integer requestId);
 		 
 }
