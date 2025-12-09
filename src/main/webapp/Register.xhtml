@@ -108,9 +108,8 @@
 
         <!-- BUTTONS -->
         <div class="button-row">
-            <p:commandButton value="Cancel"
-                             action="back"
-                             styleClass="form-button" />
+            <p:commandButton value="Login"
+							action="Login.xhtml?faces-redirect=true"                             styleClass="form-button" />
             <p:commandButton value="Register"
                              action="#{register.registerUser}"
                              update="messages messageOutput"

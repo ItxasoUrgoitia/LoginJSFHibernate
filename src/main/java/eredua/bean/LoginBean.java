@@ -89,28 +89,17 @@ public class LoginBean implements Serializable {
 	        return null;
 	    }
 
-	    // Guardar en sesión
 	    FacesContext context = FacesContext.getCurrentInstance();
 	    HttpSession session = (HttpSession) context.getExternalContext().getSession(true);
-	    
-	    // Guardar email
 	    session.setAttribute("userEmail", email);
-	    
-	    // Guardar tipo de usuario - IMPORTANTE: usar getSimpleName()
-	    String userType = u.getClass().getSimpleName();
-	    session.setAttribute("userType", userType);
-	    
-	    // Guardar nombre para mostrar
-	    session.setAttribute("userName", u.getName());
-	    
-	    System.out.println(">>> Login successful - Email: " + email + ", Type: " + userType);
+	    session.setAttribute("userType", u.getClass().getSimpleName());
 
 	    if (u instanceof Driver) {
-	        System.out.println(">>> Redirecting to DriverMenu");
+	        System.out.println("Logged in as Driver");
 	        return "DriverMenu.xhtml?faces-redirect=true";
 	    } else if (u instanceof Passenger) {
-	        System.out.println(">>> Redirecting to PassengerMenu");
-	        return "PassengerMenu.xhtml?faces-redirect=true";
+	        System.out.println("Logged in as Passenger");
+	        return "PassengerMenu.xhtml?faces-redirect=true"; 
 	    }
 
 	    return null;

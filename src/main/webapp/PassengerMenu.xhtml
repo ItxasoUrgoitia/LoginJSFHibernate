@@ -6,7 +6,7 @@
       xmlns:f="http://xmlns.jcp.org/jsf/core">
 
 <h:head>
-    <title>Driver Menu</title>
+    <title>Passenger Menu</title>
     <style type="text/css">
         .menu-container {
             max-width: 600px;
@@ -33,7 +33,7 @@
             padding: 12px 25px;
             width: 250px;
             font-size: 16px;
-            background-color: #007bff;
+            background-color: #28a745;
             color: white;
             border: none;
             border-radius: 5px;
@@ -42,15 +42,15 @@
         }
         
         .menu-button:hover {
-            background-color: #0056b3;
+            background-color: #218838;
         }
         
-        .requests-button {
-            background-color: #28a745;
+        .deposit-button {
+            background-color: #17a2b8;
         }
         
-        .requests-button:hover {
-            background-color: #1e7e34;
+        .deposit-button:hover {
+            background-color: #138496;
         }
         
         .danger-button {
@@ -79,33 +79,33 @@
 
 <h:body>
     <div class="menu-container">
-        <h2 class="menu-title">Driver Menu</h2>
+        <h2 class="menu-title">Passenger Menu</h2>
         
         <div class="welcome-message">
-            <p>Welcome, Driver!</p>
-            <p>Manage your rides and requests</p>
+            <p>Welcome, Passenger!</p>
+            <p>What would you like to do today?</p>
         </div>
         
-        <h:form id="driverMenuForm">
+        <h:form id="passengerMenuForm">
             
             <!-- Ride Management Section -->
-            <p:commandButton value="Create Ride" 
-                             action="CreateRide.xhtml?faces-redirect=true" 
+            <p:commandButton value="Search Rides" 
+                             action="QueryRides.xhtml?faces-redirect=true" 
                              styleClass="menu-button" />
             
-            <p:commandButton value="See Ride Requests" 
-                             action="seeRequests.xhtml?faces-redirect=true" 
-                             styleClass="menu-button requests-button" />
-            
-            <!-- Car Management -->
-            <p:commandButton value="Add Car" 
-                             action="AddCar.xhtml?faces-redirect=true" 
+            <p:commandButton value="Request a Ride" 
+                             action="RequestRide.xhtml?faces-redirect=true" 
                              styleClass="menu-button" />
+            
+            <!-- Account Management -->
+            <p:commandButton value="Deposit Money" 
+                             action="DepositMoney.xhtml?faces-redirect=true" 
+                             styleClass="menu-button deposit-button" />
             
             <!-- Separator -->
             <div class="separator"></div>
             
-            <!-- Account Management -->
+            <!-- Dangerous Actions -->
             <p:commandButton value="Delete Account" 
                              action="DeleteUser.xhtml?faces-redirect=true" 
                              styleClass="menu-button danger-button" />
