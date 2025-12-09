@@ -7,6 +7,7 @@ import java.util.ResourceBundle;
 import dataAccess.HibernateDataAccess;
 import domain.Ride;
 import domain.User;
+import domain.Car;
 import domain.Driver;
 import domain.Passenger;
 import exceptions.RideMustBeLaterThanTodayException;
@@ -117,4 +118,28 @@ public class BLFacadeImplementation implements BLFacade {
 	public boolean userExists(String email) {
         return dbManager.userExists(email);
     }
+	
+	public Driver getDriver(String email) {
+	    return dbManager.getDriver(email);
+	}
+	
+	public List<Car> getAllCars() {
+		return dbManager.getAllCars();
+	}
+	
+	public boolean depositMoney(String email, float amount) {
+		return dbManager.depositMoney(email, amount);
+	}
+	 public List<Ride> getAllRides(){
+		 return dbManager.getAllRides();
+	 }
+	 
+	 public boolean createRequest(String passengerEmail, Integer rideNumber, int seatsRequested) {
+		 return dbManager.createRequest(passengerEmail, rideNumber, seatsRequested);
+	 }
+	 
+	 public Ride getRideById(Integer id) {
+		 return dbManager.getRideById(id);
+	 }
+	
 }

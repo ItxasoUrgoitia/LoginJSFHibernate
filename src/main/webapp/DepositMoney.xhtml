@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+    <title>Deposit Money</title>
+    <style>
+        .form-container {
+            max-width: 500px;
+            margin: 50px auto;
+            padding: 30px;
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .form-row {
+            margin-bottom: 20px;
+        }
+        .form-label {
+            font-weight: bold;
+            display: block;
+            margin-bottom: 5px;
+        }
+        .deposit-button {
+            background-color: #007bff;
+            color: white;
+            padding: 10px 25px;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .deposit-button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</h:head>
+
+<h:body>
+    <div class="form-container">
+        <h2>Deposit Money</h2>
+
+        <h:form id="depositForm">
+            <!-- Email -->
+            <div class="form-row">
+                <div class="form-label">Email</div>
+                <p:inputText value="#{DepositBean.email}" placeholder="Enter your email" style="width:300px" />
+            </div>
+
+            <!-- Amount -->
+            <div class="form-row">
+                <div class="form-label">Amount (€)</div>
+                <p:inputNumber value="#{DepositBean.amount}" minValue="0" maxValue="10000" decimalPlaces="2" style="width:200px"/>
+            </div>
+
+            <!-- Submit Button -->
+            <p:commandButton value="Deposit" action="#{DepositBean.depositMoney}" styleClass="deposit-button" update="@form" />
+
+            <!-- Messages -->
+            <p:messages autoUpdate="true" />
+        </h:form>
+    </div>
+</h:body>
+</html>

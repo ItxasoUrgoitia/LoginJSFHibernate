@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+<h:head>
+    <title>Request a Ride</title>
+</h:head>
+
+<h:body>
+    <h:form id="form">
+        <h2>Request a Ride</h2>
+
+        <!-- Email input -->
+        <h:panelGrid columns="2" columnClasses="label,value" style="margin-bottom:10px">
+            <h:outputLabel value="Passenger email:" for="email" />
+            <p:inputText id="email" value="#{RequestBean.email}" style="width:250px">
+                <p:ajax event="blur"
+                        listener="#{RequestBean.loadRides}"
+                        update=":form:ridesTable :form:selectedRidePanel" />
+            </p:inputText>
+        </h:panelGrid>
+
+        <p:separator />
+
+        <h:outputText value="Available rides" style="font-weight:bold" />
+
+        <!-- DataTable con Converter -->
+        <p:dataTable id="ridesTable" value="#{RequestBean.rides}" var="r"
+                     selectionMode="single" selection="#{RequestBean.selectedRide}"
+                     rowKey="#{r.rideNumber}" paginator="true" rows="8"
+                     converter="rideConverter">
+            
+            <!-- Pasar la lista de rides al converter -->
+            <f:attribute name="rides" value="#{RequestBean.rides}" />
+            
+            <!-- Eventos para actualizar la selección -->
+            <p:ajax event="rowSelect" update="@form" />
+            <p:ajax event="rowUnselect" update="@form" />
+
+            <p:column headerText="From">
+                <h:outputText value="#{r.from}" />
+            </p:column>
+
+            <p:column headerText="To">
+                <h:outputText value="#{r.to}" />
+            </p:column>
+
+            <p:column headerText="Date">
+                <h:outputText value="#{r.date}" />
+            </p:column>
+
+            <p:column headerText="Price">
+                <h:outputText value="#{r.price}" />
+            </p:column>
+
+            <p:column headerText="Available seats">
+                <h:outputText value="#{r.nPlaces}" />
+            </p:column>
+
+        </p:dataTable>
+
+        <p:separator />
+
+        <!-- Selected ride details -->
+        <h:panelGrid id="selectedRidePanel" columns="2" style="margin-top:10px">
+            <h:outputLabel value="Selected ride id:" />
+            <h:outputText value="#{RequestBean.selectedRide != null ? RequestBean.selectedRide.rideNumber : 'No ride selected'}" />
+
+            <h:outputLabel value="From:" />
+            <h:outputText value="#{RequestBean.selectedRide != null ? RequestBean.selectedRide.from : '-'}" />
+
+            <h:outputLabel value="To:" />
+            <h:outputText value="#{RequestBean.selectedRide != null ? RequestBean.selectedRide.to : '-'}" />
+
+            <h:outputLabel value="Date:" />
+            <h:outputText value="#{RequestBean.selectedRide != null ? RequestBean.selectedRide.date : '-'}" />
+
+            <h:outputLabel value="Price per seat:" />
+            <h:outputText value="#{RequestBean.selectedRide != null ? RequestBean.selectedRide.price : '-'}" />
+
+            <h:outputLabel value="Available seats:" />
+            <h:outputText value="#{RequestBean.selectedRide != null ? RequestBean.selectedRide.nPlaces : '-'}" />
+
+            <h:outputLabel value="Seats to reserve:" for="seats" />
+            <p:inputNumber id="seats" value="#{RequestBean.seats}" minValue="1" maxValue="20"
+                           disabled="#{RequestBean.selectedRide == null}" />
+
+            <h:outputLabel value="Total price:" />
+            <h:outputText value="#{RequestBean.selectedRide != null ? RequestBean.selectedRide.price * RequestBean.seats : 0}" />
+
+            <h:outputLabel value=" " />
+            <p:commandButton value="Request Ride" action="#{RequestBean.requestRide}" 
+                           update="@form" disabled="#{RequestBean.selectedRide == null}" />
+            
+            <h:outputLabel value=" " />
+            <p:commandButton value="Clear Selection" action="#{RequestBean.clearSelection}" 
+                           update="@form" process="@this" />
+        </h:panelGrid>
+
+        <p:messages autoUpdate="true" />
+    </h:form>
+</h:body>
+</html>

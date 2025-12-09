@@ -4,13 +4,10 @@ import java.util.Date;
 import java.util.List;
 
 //import domain.Booking;
-import domain.Ride;
-import domain.User;
-import domain.Driver;
-import domain.Passenger;
-import exceptions.RideMustBeLaterThanTodayException;
+import domain.*;
 import exceptions.DriverDoesNotExistException;
 import exceptions.RideAlreadyExistException;
+import exceptions.RideMustBeLaterThanTodayException;
 
 
  
@@ -88,4 +85,17 @@ public interface BLFacade  {
 	 public boolean deleteUser(String email);
 	 
 	 public boolean userExists(String email);
+	 
+	 public Driver getDriver(String email);
+	 
+	 public List<Car> getAllCars();
+	 
+	 public boolean depositMoney(String email, float amount);
+	 
+	 public List<Ride> getAllRides();
+	 
+	 public boolean createRequest(String passengerEmail, Integer rideNumber, int seatsRequested);
+	 
+	 public Ride getRideById(Integer id);
+		 
 }
