@@ -37,6 +37,7 @@ public class HibernateDataAccess {
 		System.out.println("Test completado");
 	}
 
+	//Irteera hiri guztiak lortzeko metodoa
 	public List<String> getDepartCities() {
 		EntityManager em = emf.createEntityManager();
 		List<String> result = em.createQuery("SELECT DISTINCT r.from FROM Ride r", String.class).getResultList();
@@ -44,6 +45,7 @@ public class HibernateDataAccess {
 		return result;
 	}
 
+	//Helmuga-hiriak lortzeko metodoa (irteera-hiriaren arabera)
 	public List<String> getArrivalCities(String from) {
 		EntityManager em = emf.createEntityManager();
 		List<String> result = em.createQuery("SELECT DISTINCT r.to FROM Ride r WHERE r.from = :from", String.class)
@@ -52,8 +54,11 @@ public class HibernateDataAccess {
 		return result;
 	}
 
+	//Ride berri bat sortzeko metodoa
 	public Ride createRide(String from, String to, Date date, int nPlaces, float price, String driverEmail)
 			throws RideMustBeLaterThanTodayException, RideAlreadyExistException, DriverDoesNotExistException {
+		
+		//Data egungo data baino bernaduago izan behar da
 		if (date.before(new Date())) {
 			throw new RideMustBeLaterThanTodayException("The ride date must be later than today");
 		}
@@ -63,18 +68,21 @@ public class HibernateDataAccess {
 		try {
 			tx.begin();
 
+			//Gidaria bilatu
 			List<Driver> driver = em.createQuery("SELECT d FROM Driver d WHERE d.email = :email", Driver.class)
 					.setParameter("email", driverEmail).getResultList();
 			if (driver.isEmpty()) {
 				throw new DriverDoesNotExistException("There is no user with that email");
 			}
 
+			//Ride bakoitza egiaztatu
 			for (Ride r : driver.get(0).getRides()) {
 				if (r.getFrom().equals(from) && r.getTo().equals(to) && r.getDate().equals(date)) {
 					throw new RideAlreadyExistException("Ride already exists for this driver");
 				}
 			}
 
+			//Ride berria sortu
 			Ride ride = new Ride(from, to, date, nPlaces, price, driver.get(0));
 			driver.get(0).getRides().add(ride);
 			em.persist(ride);
@@ -91,6 +99,8 @@ public class HibernateDataAccess {
 		}
 	}
 
+	
+	//Ride-ak bilatu irteera, helmuga eta dataren arabera
 	public List<Ride> getRides(String from, String to, Date date) {
 		EntityManager em = emf.createEntityManager();
 		try {
@@ -102,6 +112,7 @@ public class HibernateDataAccess {
 		}
 	}
 
+	//Gidaria lortu emailaren arabera
 	public Driver getDriver(String email) {
 		EntityManager em = emf.createEntityManager();
 		try {
@@ -115,6 +126,7 @@ public class HibernateDataAccess {
 		}
 	}
 
+	//Ridea lortu IDaren arabera
 	public Ride getRideById(Integer id) {
 		EntityManager em = emf.createEntityManager();
 		try {
@@ -124,6 +136,7 @@ public class HibernateDataAccess {
 		}
 	}
 
+	//Erabiltzailea erregistratuta dagoen egiaztatu
 	public User isRegistered(String email, String pasahitza) {
 		EntityManager em = emf.createEntityManager();
 		try {
@@ -143,6 +156,7 @@ public class HibernateDataAccess {
 		}
 	}
 
+	//Hilabete bereko datak lortu ride-ekin
 	public List<Date> getThisMonthDatesWithRides(String from, String to, Date date) {
 		EntityManager em = emf.createEntityManager();
 		try {
@@ -154,22 +168,25 @@ public class HibernateDataAccess {
 		}
 	}
 
+	//Datuak hasieratzeko metodoa (datuak gehitzen ditu)
 	public void initializeDB() {
 		EntityManager em = emf.createEntityManager();
 		EntityTransaction tx = em.getTransaction();
 		try {
 			tx.begin();
 
-			// Ejemplo: crear algunos conductores y rides
+			//Gidariak sortu
 			Driver d1 = new Driver("alice@example.com", "Alice", "456");
 			Driver d2 = new Driver("bob@example.com", "Bob", "789");
 			em.persist(d1);
 			em.persist(d2);
 
+			//Bidaiaria sortu
 			Passenger p1 = new Passenger("a@gmail.com", "a", "123");
 			p1.setMoney(100);
 			em.persist(p1);
 
+			//Rideak sortu
 			Ride r1 = new Ride("CityA", "CityB", new Date(System.currentTimeMillis() + 86400000), 3, 2.0f, d1);
 			Ride r2 = new Ride("CityB", "CityC", new Date(System.currentTimeMillis() + 172800000), 2, 3.0f, d2);
 			Ride r3 = new Ride("CityC", "CityD", new Date(System.currentTimeMillis() + 86400000), 3, 2.0f, d1);
@@ -184,6 +201,7 @@ public class HibernateDataAccess {
 			em.persist(r5);
 			em.persist(r6);
 
+			//Kotxeak sortu
 			Car c1 = new Car("1234ABC", 3, "fsdf", "black", d1);
 			Car c2 = new Car("2345ABC", 4, "fsf", "blue", d1);
 
@@ -205,13 +223,16 @@ public class HibernateDataAccess {
 		}
 
 	}
-
+	
+	//Gidari bat sortzeko metodoa
 	public void createDriver(Driver driver) {
 		EntityManager em = emf.createEntityManager();
 		EntityTransaction tx = em.getTransaction();
 
 		try {
 			tx.begin();
+			
+			//Emaila dagoeneko existitzen den begiratu
 			String checkSql = "SELECT email FROM users WHERE email = ?";
 			List<?> result = em.createNativeQuery(checkSql).setParameter(1, driver.getEmail()).getResultList();
 
@@ -219,12 +240,12 @@ public class HibernateDataAccess {
 				throw new RuntimeException("User with email " + driver.getEmail() + " already exists.");
 			}
 
-			// 2. Insertar en la tabla users
+			// Erabiltzailea users taulan sartu
 			String insertUserSql = "INSERT INTO users (email, name, pasahitza) VALUES (?, ?, ?)";
 			em.createNativeQuery(insertUserSql).setParameter(1, driver.getEmail()).setParameter(2, driver.getName())
 					.setParameter(3, driver.getPasahitza()).executeUpdate();
 
-			// 3. Insertar en la tabla Driver (por JOINED)
+			//Gidaria gidarien taulan sartu
 			String insertDriverSql = "INSERT INTO Driver (email) VALUES (?)";
 			em.createNativeQuery(insertDriverSql).setParameter(1, driver.getEmail()).executeUpdate();
 
@@ -240,6 +261,7 @@ public class HibernateDataAccess {
 		}
 	}
 
+	//Bidaiari berri bat sortu
 	public void createPassenger(Passenger passenger) {
 		EntityManager em = emf.createEntityManager();
 		EntityTransaction tx = em.getTransaction();
@@ -247,19 +269,19 @@ public class HibernateDataAccess {
 		try {
 			tx.begin();
 
-			// Comprobar si ya existe
+			// Existitzen den koprobatu
 			String checkSql = "SELECT email FROM users WHERE email = ?";
 			List<?> result = em.createNativeQuery(checkSql).setParameter(1, passenger.getEmail()).getResultList();
 			if (!result.isEmpty()) {
 				throw new RuntimeException("User with email " + passenger.getEmail() + " already exists.");
 			}
 
-			// Insertar en users
+			//Usersen gorde
 			String insertUserSql = "INSERT INTO users (email, name, pasahitza) VALUES (?, ?, ?)";
 			em.createNativeQuery(insertUserSql).setParameter(1, passenger.getEmail())
 					.setParameter(2, passenger.getName()).setParameter(3, passenger.getPasahitza()).executeUpdate();
 
-			// Insertar en passenger con dinero inicial
+			//Passenger taulan sartu (dirua 0rekin hasieratu)
 			passenger.setMoney(0f);
 			String insertPassengerSql = "INSERT INTO passenger (email, money) VALUES (?, ?)";
 			em.createNativeQuery(insertPassengerSql).setParameter(1, passenger.getEmail())
@@ -277,6 +299,7 @@ public class HibernateDataAccess {
 		}
 	}
 
+	//Kotxe berria gehitzeko metodoa
 	public boolean addCar(String licensePlate, int places, String model, String color, String driverEmail) {
 		EntityManager em = emf.createEntityManager();
 		EntityTransaction tx = em.getTransaction();
@@ -284,6 +307,7 @@ public class HibernateDataAccess {
 		try {
 			tx.begin();
 
+			//Gidaria bilatu
 			Driver driver = em.find(Driver.class, driverEmail);
 			if (driver == null) {
 				System.out.println("Driver no encontrado: " + driverEmail);
@@ -291,15 +315,18 @@ public class HibernateDataAccess {
 				return false;
 			}
 
+			//Kotxearen matrikula dagoeneko existitzen den egiaztatu
 			if (driver.doesCarExist(licensePlate)) {
 				System.out.println("Car already exists: " + licensePlate);
 				tx.rollback();
 				return false;
 			}
 
+			//Kotxe berria sortu
 			Car car = driver.addCar(licensePlate, places, model, color);
 			em.persist(car);
 
+			//Gidariaren kotxe zerrenda eguneratu
 			driver.getCars().add(car);
 			em.merge(driver);
 
@@ -317,6 +344,7 @@ public class HibernateDataAccess {
 		}
 	}
 
+	//Erabiltzailea ezabatzeko metodoa
 	public boolean deleteUser(String email) {
 		EntityManager em = emf.createEntityManager();
 		EntityTransaction tx = null;
@@ -325,24 +353,24 @@ public class HibernateDataAccess {
 			tx = em.getTransaction();
 			tx.begin();
 
-			// Delete all rides for the driver
+			// Gidariaren ride guztiak ezabatu
 			em.createNativeQuery("DELETE FROM Ride WHERE driver_email = ?").setParameter(1, email).executeUpdate();
 
-			// Delete cars
+			// Kotxeak ezabatu
 			em.createNativeQuery("DELETE FROM Car WHERE driver_email = ?").setParameter(1, email).executeUpdate();
 
-			// Delete from Passenger
+			// Bidaiaria ezabatu
 			em.createNativeQuery("DELETE FROM Passenger WHERE email = ?").setParameter(1, email).executeUpdate();
 
-			// Delete from Driver
+			// Gidaria ezabatu
 			em.createNativeQuery("DELETE FROM Driver WHERE email = ?").setParameter(1, email).executeUpdate();
 
-			// Finally delete from users
+			// Erabiltzailea users-etik ezabatu
 			em.createNativeQuery("DELETE FROM users WHERE email = ?").setParameter(1, email).executeUpdate();
 
 			tx.commit();
 
-			// Verify deletion
+			// Egiaztatu ezabatu dela
 			List<?> remaining = em.createNativeQuery("SELECT email FROM users WHERE email = ?").setParameter(1, email)
 					.getResultList();
 
@@ -358,6 +386,7 @@ public class HibernateDataAccess {
 		}
 	}
 
+	//Erabiltzailea existitzen den egiaztatzeko
 	public boolean userExists(String email) {
 		EntityManager em = emf.createEntityManager();
 		try {
@@ -370,6 +399,7 @@ public class HibernateDataAccess {
 		}
 	}
 
+	//Kotxe guztiak lortzeko
 	public List<Car> getAllCars() {
 		EntityManager em = emf.createEntityManager();
 		try {
@@ -381,29 +411,31 @@ public class HibernateDataAccess {
 		}
 	}
 
+	//Dirua gehitzeko metodoa bidaiari baten kontuan
 	public boolean depositMoney(String email, float amount) {
 		EntityManager em = emf.createEntityManager();
-		EntityTransaction tx = em.getTransaction(); // Usamos tu patrón
+		EntityTransaction tx = em.getTransaction(); 
 		try {
-			tx.begin(); // Iniciamos la transacción
+			tx.begin(); 
 
+            // Bidaiaria bilatu
 			Passenger p = em.createQuery("SELECT p FROM Passenger p WHERE p.email = :email", Passenger.class)
 					.setParameter("email", email).getSingleResult();
 
 			if (p == null) {
-				tx.rollback(); // hacemos rollback si no existe
+				tx.rollback(); 
 				return false;
 			}
 
+            // Dirua gehitu
 			p.setMoney(p.getMoney() + amount);
-			em.merge(p); // actualizamos el pasajero
-
-			tx.commit(); // confirmamos cambios
+			em.merge(p);
+			tx.commit(); 
 			return true;
 
 		} catch (Exception e) {
 			if (tx.isActive()) {
-				tx.rollback(); // rollback en caso de error
+				tx.rollback(); 
 			}
 			e.printStackTrace();
 			return false;
@@ -412,6 +444,7 @@ public class HibernateDataAccess {
 		}
 	}
 
+    // Ride guztiak lortzeko metodoa 
 	public List<Ride> getAllRides() {
 		EntityManager em = emf.createEntityManager();
 		try {
@@ -423,49 +456,50 @@ public class HibernateDataAccess {
 		}
 	}
 
+    // Eskaera berri bat sortzeko metodoa
 	public boolean createRequest(String passengerEmail, Integer rideNumber, int seatsRequested) {
 		EntityManager em = emf.createEntityManager();
 		EntityTransaction tx = em.getTransaction();
 		try {
 			tx.begin();
 
-			// Cargar ride
+			// Ride-a bilatu
 			Ride ride = em.find(Ride.class, rideNumber);
 			if (ride == null || ride.isCancelled()) {
 				tx.rollback();
-				return false; // ride no existe o cancelado
+				return false;
 			}
 
-			// Cargar passenger
+			//Bidaiaria bilatu
 			Passenger passenger;
 			try {
 				passenger = em.createQuery("SELECT p FROM Passenger p WHERE p.email = :email", Passenger.class)
 						.setParameter("email", passengerEmail).getSingleResult();
 			} catch (NoResultException ex) {
 				tx.rollback();
-				return false; // passenger no existe
+				return false; 
 			}
 
-			// comprobaciones
+			//Balidazioak
 			if (seatsRequested <= 0) {
 				tx.rollback();
 				return false;
 			}
 
 			if (seatsRequested > ride.getnPlaces()) {
-				// no hay suficientes plazas
+				//Ez daude plazak
 				tx.rollback();
 				return false;
 			}
 
 			float totalPrice = ride.getPrice() * seatsRequested;
 			if (passenger.getMoney() < totalPrice) {
-				// no tiene dinero suficiente
+				//Ez du nahiko diru
 				tx.rollback();
 				return false;
 			}
 
-			// Crear Request (estado ACCEPTED)
+			//Request sortu
 			Request req = new Request(ride, passenger, seatsRequested, totalPrice);
 
 			em.persist(req);
@@ -484,10 +518,10 @@ public class HibernateDataAccess {
 		}
 	}
 	
+    // Gidari baten eskaera guztiak lortzeko metodoa
 	public List<Request> getDriverRequests(String driverEmail) {
 	    EntityManager em = emf.createEntityManager();
 	    try {
-	        // Driver baten rides guztien request-ak lortu
 	        String query = "SELECT r FROM Request r " +
 	                      "WHERE r.ride.driver.email = :driverEmail " +
 	                      "ORDER BY r.requestDate DESC";
@@ -499,6 +533,7 @@ public class HibernateDataAccess {
 	    }
 	}
 
+    // Eskaera bat onartzeko metodoa
 	public boolean acceptRequest(Integer requestId) {
 	    EntityManager em = emf.createEntityManager();
 	    EntityTransaction tx = em.getTransaction();
@@ -533,6 +568,7 @@ public class HibernateDataAccess {
 	    }
 	}
 	
+    // Eskaera bat ez onartzeko metodoa
 	public boolean rejectRequest(Integer requestId) {
 	    EntityManager em = emf.createEntityManager();
 	    EntityTransaction tx = em.getTransaction();
