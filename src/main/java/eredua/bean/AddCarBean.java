@@ -1,11 +1,13 @@
 package eredua.bean;
 
+import jakarta.annotation.PostConstruct;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.faces.application.FacesMessage;
 import jakarta.faces.context.FacesContext;
 import jakarta.inject.Named;
-
+import jakarta.servlet.http.HttpSession;
 import businessLogic.BLFacade;
+import domain.Driver;
 
 @Named("addCarBean")
 @RequestScoped
@@ -16,8 +18,11 @@ public class AddCarBean {
     private String model;
     private String color;
     private String driverEmail;
+    private String userName;
     
-    private BLFacade facadeBL;
+    
+
+	private BLFacade facadeBL;
     private String message;
     private boolean success = false;
     
@@ -33,6 +38,14 @@ public class AddCarBean {
     public void setLicensePlate(String licensePlate) {
         this.licensePlate = licensePlate;
     }
+    
+    public String getUserName() {
+		return userName;
+	}
+
+	public void setUserName(String userName) {
+		this.userName = userName;
+	}
     
     public Integer getPlaces() {
         return places;
@@ -82,6 +95,72 @@ public class AddCarBean {
         this.success = success;
     }
     
+    @PostConstruct
+    public void init() {
+        System.out.println(">>> SeeRequestsBean.init() ejecutado");
+        loadDriverFromSession();
+        
+        if (isDriverLoggedIn()) {
+            System.out.println(">>> Driver logged in: " + driverEmail);
+            
+        } else {
+            System.out.println(">>> NOT a driver or not logged in");
+        }
+    }
+    
+    private void loadDriverFromSession() {
+        try {
+            FacesContext context = FacesContext.getCurrentInstance();
+            HttpSession session = (HttpSession) context.getExternalContext().getSession(false);
+            
+            System.out.println(">>> Checking session...");
+            
+            if (session != null) {
+                String userEmail = (String) session.getAttribute("userEmail");
+                String userType = (String) session.getAttribute("userType");
+                
+                System.out.println(">>> Session userEmail: " + userEmail);
+                System.out.println(">>> Session userType: " + userType);
+                
+                // DEPURACIÓN: Mostrar todas las variables de sesión
+                java.util.Enumeration<String> sessionAttr = session.getAttributeNames();
+                System.out.println(">>> All session attributes:");
+                while (sessionAttr.hasMoreElements()) {
+                    String attr = sessionAttr.nextElement();
+                    System.out.println("  - " + attr + ": " + session.getAttribute(attr));
+                }
+                
+                if (userEmail != null && "Driver".equals(userType)) {
+                    this.driverEmail = userEmail;
+                    
+                    // Obtener nombre del driver para mostrar
+                    try {
+                        Driver driver = facadeBL.getDriver(userEmail);
+                        if (driver != null) {
+                            this.userName = driver.getName();
+                        }
+                    } catch (Exception e) {
+                        System.out.println(">>> Could not get driver details: " + e.getMessage());
+                    }
+                } else {
+                    System.out.println(">>> NOT a Driver in session");
+                }
+            } else {
+                System.out.println(">>> No active session found");
+            }
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println(">>> Error in loadDriverFromSession: " + e.getMessage());
+        }
+    }
+    
+    public boolean isDriverLoggedIn() {
+        boolean loggedIn = (driverEmail != null && !driverEmail.isEmpty());
+        System.out.println(">>> isDriverLoggedIn() returning: " + loggedIn + " (email: " + driverEmail + ")");
+        return loggedIn;
+    }
+    
     public void addCar() {
         success = false;
         message = null;
@@ -105,13 +184,6 @@ public class AddCarBean {
             message = "Model is required";
             FacesContext.getCurrentInstance().addMessage(null, 
                 new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Model is required"));
-            return;
-        }
-        
-        if (driverEmail == null || driverEmail.trim().isEmpty()) {
-            message = "Driver email is required";
-            FacesContext.getCurrentInstance().addMessage(null, 
-                new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Driver email is required"));
             return;
         }
         

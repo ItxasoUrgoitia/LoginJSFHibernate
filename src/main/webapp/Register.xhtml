@@ -118,7 +118,12 @@
 
         <p:messages id="messages" autoUpdate="true" />
         <h:outputText id="messageOutput" value="#{register.message}" style="color:red; font-weight:bold; margin-top:15px;" />
-
+	<!-- BOTÓN BACK -->
+			<div class="button-row" style="margin-top: 20px;">
+				<p:commandButton value="Back"
+					action="Hasierahasiera.xhtml?faces-redirect=true"
+					styleClass="form-button" />
+			</div>
     </h:form>
 
 </div>

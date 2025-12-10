@@ -103,5 +103,7 @@ public interface BLFacade  {
 	 public boolean acceptRequest(Integer requestId);
 	 
 	 public boolean rejectRequest(Integer requestId);
+	 
+	 public Passenger getPassenger(String email);
 		 
 }

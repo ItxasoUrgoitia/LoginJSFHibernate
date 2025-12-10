@@ -62,6 +62,20 @@
 .create-button:hover {
 	background-color: #0056b3;
 }
+
+.user-info {
+	flex: 1;
+	background-color: #e3f2fd;
+	padding: 12px 15px;
+	border-radius: 5px;
+	border: 1px solid #90caf9;
+	color: #1565c0;
+	font-size: 14px;
+}
+
+.user-info p {
+	margin: 5px 0;
+}
 </style>
 </h:head>
 
@@ -71,85 +85,102 @@
 			Ride</h2>
 
 		<h:form id="form">
+			<!-- Si no es driver -->
+            <h:panelGroup rendered="#{not CreateRidesBean.driverLoggedIn}">
+                <div class="error-message">
+                    <h3>⚠️ Access Restricted</h3>
+                    <p>Only drivers can create rides.</p>
+                    <p:commandButton value="Go to Login" 
+                                   action="login.xhtml?faces-redirect=true" />
+                </div>
+            </h:panelGroup>
+            
+            <!-- Contenido solo para drivers logeados -->
+            <h:panelGroup rendered="#{CreateRidesBean.driverLoggedIn}">
+            
+                <!-- Información del usuario en la misma línea que Depart City -->
+                <div class="form-row">
+                    <div class="form-label">
+                        <h:outputLabel value="Driver Info" />
+                    </div>
+                    <div class="user-info">
+            
+                        <p><strong>Email:</strong> #{CreateRidesBean.driverEmail}</p>
+                    </div>
+                </div>
+                
+                <!-- Depart City Row -->
+                <div class="form-row">
+                    <div class="form-label">
+                        <h:outputLabel value="Depart City" for="departCity" />
+                    </div>
+                    <div class="form-field">
+                        <p:inputText id="departCity" value="#{CreateRidesBean.departCity}"
+                            style="width:300px" placeholder="Enter departure city" />
+                    </div>
+                </div>
 
-			<!-- Depart City Row -->
-			<div class="form-row">
-				<div class="form-label">
-					<h:outputLabel value="Depart City" for="departCity" />
-				</div>
-				<div class="form-field">
-					<p:inputText id="departCity" value="#{CreateRidesBean.departCity}"
-						style="width:300px" placeholder="Enter departure city" />
-				</div>
-			</div>
+                <!-- Arrival City Row -->
+                <div class="form-row">
+                    <div class="form-label">
+                        <h:outputLabel value="Arrival City" for="arrivalCity" />
+                    </div>
+                    <div class="form-field">
+                        <p:inputText id="arrivalCity"
+                            value="#{CreateRidesBean.arrivalCity}" style="width:300px"
+                            placeholder="Enter arrival city" />
+                    </div>
+                </div>
 
-			<!-- Arrival City Row -->
-			<div class="form-row">
-				<div class="form-label">
-					<h:outputLabel value="Arrival City" for="arrivalCity" />
-				</div>
-				<div class="form-field">
-					<p:inputText id="arrivalCity"
-						value="#{CreateRidesBean.arrivalCity}" style="width:300px"
-						placeholder="Enter arrival city" />
-				</div>
-			</div>
+                <!-- Price Row -->
+                <div class="form-row">
+                    <div class="form-label">
+                        <h:outputLabel value="Price (€)" for="price" />
+                    </div>
+                    <div class="form-field">
+                        <p:inputNumber id="price" value="#{CreateRidesBean.price}"
+                            minValue="0" maxValue="1000" decimalPlaces="2"
+                            styleClass="number-input" />
+                    </div>
+                </div>
 
-			<!-- Email Row -->
-			<div class="form-row">
-				<div class="form-label">
-					<h:outputLabel value="Driver Email" for="email" />
-				</div>
-				<div class="form-field">
-					<p:inputText id="email" value="#{CreateRidesBean.email}"
-						style="width:300px" placeholder="Enter driver email">
-						<!-- Al perder foco, cargamos los coches del driver -->
-						<p:ajax event="blur" listener="#{CreateRidesBean.loadCars}"
-							update="car" />
-					</p:inputText>
-				</div>
-			</div>
+                
 
-			<!-- Price Row -->
-			<div class="form-row">
-				<div class="form-label">
-					<h:outputLabel value="Price (€)" for="price" />
-				</div>
-				<div class="form-field">
-					<p:inputNumber id="price" value="#{CreateRidesBean.price}"
-						minValue="0" maxValue="1000" decimalPlaces="2"
-						styleClass="number-input" />
-				</div>
-			</div>
+                <!-- Car Selection Row -->
+                <div class="form-row">
+                    <div class="form-label">
+                        <h:outputLabel value="Select a Car" for="car" />
+                    </div>
+                    <div class="form-field">
+                        <p:selectOneMenu id="car" value="#{CreateRidesBean.selectedCar}"
+                            converter="carConverter" style="width:300px">
+                            <f:selectItem itemLabel="Select a car" itemValue="#{null}"
+                                noSelectionOption="true" />
+                            <f:selectItems value="#{CreateRidesBean.cars}" var="c"
+                                itemLabel="#{c.model} (#{c.licensePlate}) - #{c.places} seats" itemValue="#{c}" />
+                            <f:attribute name="cars" value="#{CreateRidesBean.cars}" />
+                        </p:selectOneMenu>
+                    </div>
+                </div>
 
-			<!-- Car Selection Row -->
-			<div class="form-row">
-				<div class="form-label">
-					<h:outputLabel value="Select a Car" for="car" />
-				</div>
-				<div class="form-field">
-					<p:selectOneMenu id="car" value="#{CreateRidesBean.selectedCar}"
-						converter="carConverter" style="width:300px">
-						<f:selectItem itemLabel="Select a car" itemValue="#{null}"
-							noSelectionOption="true" />
-						<f:selectItems value="#{CreateRidesBean.cars}" var="c"
-							itemLabel="#{c.model} (#{c.licensePlate})" itemValue="#{c}" />
-						<f:attribute name="cars" value="#{CreateRidesBean.cars}" />
-					</p:selectOneMenu>
-				</div>
-			</div>
+                <!-- Ride Date Section -->
+                <div class="section-title">Ride date</div>
+                <div class="form-row">
+                    <p:calendar id="data" value="#{CreateRidesBean.data}"
+                        navigator="false" mode="inline" />
+                </div>
 
-			<!-- Ride Date Section -->
-			<div class="section-title">Ride date</div>
-			<div class="form-row">
-				<p:calendar id="data" value="#{CreateRidesBean.data}"
-					navigator="false" mode="inline" />
-			</div>
+                <!-- Hidden field for driver email -->
+                <h:inputHidden value="#{CreateRidesBean.driverEmail}" />
 
-			<!-- Create Ride Button -->
-			<p:commandButton value="Create Ride"
-				action="#{CreateRidesBean.createRide}" styleClass="create-button"
-				update="@form" />
+                <!-- Create Ride Button -->
+                <p:commandButton value="Create Ride"
+                    action="#{CreateRidesBean.createRide}" styleClass="create-button"
+                    update="@form" />
+                
+                
+                    
+            </h:panelGroup> <!-- ¡ESTA ES LA ETIQUETA QUE FALTABA! -->
 
 			<p:messages autoUpdate="true" />
 

@@ -116,6 +116,20 @@
             color: #e74c3c;
             margin-left: 3px;
         }
+        
+        .user-info {
+            background-color: #e3f2fd;
+            padding: 12px 15px;
+            border-radius: 5px;
+            border: 1px solid #90caf9;
+            color: #1565c0;
+            font-size: 14px;
+            margin-top: 10px;
+        }
+        
+        .user-info p {
+            margin: 5px 0;
+        }
     </style>
 </h:head>
 
@@ -124,83 +138,96 @@
     <h2 class="form-title">Add New Car</h2>
     
     <h:form id="carForm">
-        
-        <!-- License Plate -->
-        <div class="form-row">
-            <h:outputLabel value="License Plate:" styleClass="form-label"/>
-            <span class="required-star">*</span>
-            <p:inputText value="#{addCarBean.licensePlate}" 
-                        styleClass="form-input"
-                        placeholder="Enter license plate (e.g., 1234ABC)"
-                        required="true"
-                        requiredMessage="License plate is required"/>
-        </div>
-        
-        <!-- Number of Places -->
-        <div class="form-row">
-            <h:outputLabel value="Number of Places:" styleClass="form-label"/>
-            <span class="required-star">*</span>
-            <p:inputNumber value="#{addCarBean.places}" 
-                         styleClass="form-input"
-                         minValue="1"
-                         placeholder="Enter number of seats"
-                         required="true"
-                         requiredMessage="Number of places is required"/>
-        </div>
-        
-        <!-- Model -->
-        <div class="form-row">
-            <h:outputLabel value="Model:" styleClass="form-label"/>
-            <span class="required-star">*</span>
-            <p:inputText value="#{addCarBean.model}" 
-                        styleClass="form-input"
-                        placeholder="Enter car model (e.g., Toyota Corolla)"
-                        required="true"
-                        requiredMessage="Model is required"/>
-        </div>
-        
-        <!-- Color -->
-        <div class="form-row">
-            <h:outputLabel value="Color:" styleClass="form-label"/>
-            <p:inputText value="#{addCarBean.color}" 
-                        styleClass="form-input"
-                        placeholder="Enter car color (optional)"/>
-        </div>
-        
-        <!-- Driver Email -->
-        <div class="form-row">
-            <h:outputLabel value="Driver Email:" styleClass="form-label"/>
-            <span class="required-star">*</span>
-            <p:inputText value="#{addCarBean.driverEmail}" 
-                        styleClass="form-input"
-                        placeholder="Enter driver's email"
-                        required="true"
-                        requiredMessage="Driver email is required"/>
-        </div>
-        
-        <!-- Buttons -->
-        <div class="button-container">
-            <p:commandButton value="Add Car" 
-                           action="#{addCarBean.addCar}"
-                           styleClass="btn-primary"
-                           update="carForm messages"
-                           process="@form"/>
-            
-            <p:button value="Back to Menu" 
-                     outcome="DriverMenu.xhtml"
-                     styleClass="btn-secondary"/>
-        </div>
-        
-        <!-- Messages -->
-        <p:messages id="messages" showDetail="true" autoUpdate="true" />
-        
-        <!-- Success Message -->
-        <h:panelGroup rendered="#{addCarBean.success}">
-            <div class="message-container success-message">
-                <p>#{addCarBean.message}</p>
-                <p>Car has been successfully added to the system.</p>
+        <!-- Si no es driver -->
+        <h:panelGroup rendered="#{not CreateRidesBean.driverLoggedIn}">
+            <div class="error-message">
+                <h3>⚠️ Access Restricted</h3>
+                <p>Only drivers can add cars.</p>
+                <p:commandButton value="Go to Login" 
+                               action="login.xhtml?faces-redirect=true" />
             </div>
         </h:panelGroup>
+        
+        <!-- Contenido solo para drivers logeados -->
+        <h:panelGroup rendered="#{CreateRidesBean.driverLoggedIn}">
+            
+            <!-- Información del usuario -->
+            <div class="form-row">
+                <div class="form-label">
+                    <h:outputLabel value="Driver Info" />
+                </div>
+                <div class="user-info">
+                    <p><strong>Email:</strong> #{CreateRidesBean.driverEmail}</p>
+                </div>
+            </div>
+            
+            <!-- License Plate -->
+            <div class="form-row">
+                <h:outputLabel value="License Plate:" styleClass="form-label"/>
+                <span class="required-star">*</span>
+                <p:inputText value="#{addCarBean.licensePlate}" 
+                            styleClass="form-input"
+                            placeholder="Enter license plate (e.g., 1234ABC)"
+                            required="true"
+                            requiredMessage="License plate is required"/>
+            </div>
+            
+            <!-- Number of Places -->
+            <div class="form-row">
+                <h:outputLabel value="Number of Places:" styleClass="form-label"/>
+                <span class="required-star">*</span>
+                <p:inputNumber value="#{addCarBean.places}" 
+                             styleClass="form-input"
+                             minValue="1"
+                             placeholder="Enter number of seats"
+                             required="true"
+                             requiredMessage="Number of places is required"/>
+            </div>
+            
+            <!-- Model -->
+            <div class="form-row">
+                <h:outputLabel value="Model:" styleClass="form-label"/>
+                <span class="required-star">*</span>
+                <p:inputText value="#{addCarBean.model}" 
+                            styleClass="form-input"
+                            placeholder="Enter car model (e.g., Toyota Corolla)"
+                            required="true"
+                            requiredMessage="Model is required"/>
+            </div>
+            
+            <!-- Color -->
+            <div class="form-row">
+                <h:outputLabel value="Color:" styleClass="form-label"/>
+                <p:inputText value="#{addCarBean.color}" 
+                            styleClass="form-input"
+                            placeholder="Enter car color (optional)"/>
+            </div>
+            
+            <!-- Buttons -->
+            <div class="button-container">
+                <p:commandButton value="Add Car" 
+                               action="#{addCarBean.addCar}"
+                               styleClass="btn-primary"
+                               update="carForm messages"
+                               process="@form"/>
+                
+                <p:button value="Back to Menu" 
+                         outcome="DriverMenu.xhtml"
+                         styleClass="btn-secondary"/>
+            </div>
+            
+            <!-- Messages -->
+            <p:messages id="messages" showDetail="true" autoUpdate="true" />
+            
+            <!-- Success Message -->
+            <h:panelGroup rendered="#{addCarBean.success}">
+                <div class="message-container success-message">
+                    <p>#{addCarBean.message}</p>
+                    <p>Car has been successfully added to the system.</p>
+                </div>
+            </h:panelGroup>
+            
+        </h:panelGroup> <!-- ¡ESTA ES LA ETIQUETA QUE FALTABA! -->
         
     </h:form>
 </div>

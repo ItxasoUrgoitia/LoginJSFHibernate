@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
     xmlns:h="http://xmlns.jcp.org/jsf/html"
-    xmlns:f="http://xmlns.jcp.org/jsf/core">
+    xmlns:f="http://xmlns.jcp.org/jsf/core"
+    xmlns:p="http://primefaces.org/ui">
 
 <h:head>
     <title>Delete User - Ride Sharing</title>
@@ -213,6 +214,25 @@
             font-weight: 600;
             color: #495057;
         }
+        
+        .user-type-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-left: 10px;
+        }
+        
+        .driver-badge {
+            background-color: #e3f2fd;
+            color: #1976d2;
+        }
+        
+        .passenger-badge {
+            background-color: #f3e5f5;
+            color: #7b1fa2;
+        }
     </style>
 </h:head>
 
@@ -220,103 +240,117 @@
     <div class="form-container">
         <h2 class="form-title">⚠ Delete User Account</h2>
         
-        <div class="warning-box">
-            <p><span class="warning-icon">⚠</span> <strong>Warning:</strong> This action cannot be undone.</p>
-            <p>Deleting a user account will:</p>
-            <ul>
-                <li>Cancel all future rides if the user is a driver</li>
-                <li>Remove all associated cars if the user is a driver</li>
-                <li>Permanently delete the user profile</li>
-            </ul>
-        </div>
+        <!-- Contenido condicional -->
+        <h:panelGroup rendered="#{not deleteUserBean.userLoggedIn}">
+            <div class="error-message">
+                <h3>⚠️ Access Restricted</h3>
+                <p>Only authenticated users can delete accounts.</p>
+                <p:commandButton value="Go to Login" 
+                               action="login.xhtml?faces-redirect=true" />
+            </div>
+        </h:panelGroup>
         
-        <h:form id="deleteForm">
-            
-            <!-- Email Input -->
-            <div class="form-row">
-                <label class="form-label">Email to delete: <span class="required-star">*</span></label>
-                <h:inputText value="#{deleteUserBean.email}" 
-                            styleClass="form-input"
-                            placeholder="Enter the email address"
-                            required="true"
-                            requiredMessage="Email is required"
-                            id="emailInput"
-                            disabled="#{deleteUserBean.showConfirmation}">
-                    <f:ajax event="blur" render="emailMessage"/>
-                </h:inputText>
-                <h:message id="emailMessage" for="emailInput" styleClass="error-message-text"/>
+        <!-- Contenido solo para usuarios logeados -->
+        <h:panelGroup rendered="#{deleteUserBean.userLoggedIn}">
+        
+            <div class="warning-box">
+                <p><span class="warning-icon">⚠</span> <strong>Warning:</strong> This action cannot be undone.</p>
+                <p>Deleting a user account will:</p>
+                <ul>
+                    <h:panelGroup rendered="#{deleteUserBean.userType == 'Driver'}">
+                        <li>Cancel all future rides if the user is a driver</li>
+                        <li>Remove all associated cars if the user is a driver</li>
+                    </h:panelGroup>
+                    <h:panelGroup rendered="#{deleteUserBean.userType == 'Passenger'}">
+                        <li>Cancel all future ride bookings</li>
+                        <li>Remove all passenger data</li>
+                    </h:panelGroup>
+                    <li>Permanently delete the user profile</li>
+                </ul>
             </div>
             
-            <!-- Check User Button -->
-            <h:panelGroup rendered="#{not deleteUserBean.showConfirmation}">
-                <div class="button-container">
-                    <h:commandButton value="Check User" 
-                                   action="#{deleteUserBean.checkUser}"
-                                   styleClass="btn-secondary">
-                        <f:ajax execute="@form" render="@form messages"/>
-                    </h:commandButton>
-                    
-                    
-                </div>
-            </h:panelGroup>
-            
-            <!-- Confirmation Section -->
-            <h:panelGroup rendered="#{deleteUserBean.showConfirmation}">
-                <div class="confirmation-section">
-                    <div class="form-row">
-                        <label class="form-label">Confirm email: <span class="required-star">*</span></label>
-                        <h:inputText value="#{deleteUserBean.confirmationEmail}" 
-                                    styleClass="form-input"
-                                    placeholder="Type the email again to confirm"
-                                    required="true"
-                                    requiredMessage="Please confirm the email"
-                                    id="confirmInput">
-                            <f:ajax event="blur" render="confirmMessage"/>
-                        </h:inputText>
-                        <h:message id="confirmMessage" for="confirmInput" styleClass="error-message-text"/>
+            <h:form id="deleteForm">
+                
+                <!-- Información del usuario -->
+                <div class="form-row">
+                    <div class="form-label">
+                        <h:outputLabel value="User Info" />
                     </div>
-                    
-                    <div class="email-display">
-                        Email to delete: <strong>#{deleteUserBean.email}</strong>
-                    </div>
-                    
-                    <div class="info-message">
-                        <p>⚠ Please type the email again to confirm deletion.</p>
+                    <div class="user-info">
+                        <p><strong>Name:</strong> #{deleteUserBean.userName}</p>
+                        <p><strong>Email:</strong> #{deleteUserBean.userEmail}</p>
+                        <p><strong>Type:</strong> 
+                            <span class="user-type-badge #{deleteUserBean.userType == 'Driver' ? 'driver-badge' : 'passenger-badge'}">
+                                #{deleteUserBean.userType}
+                            </span>
+                        </p>
                     </div>
                 </div>
                 
-                <div class="button-container">
-                    <h:commandButton value="Delete User" 
-                                   action="#{deleteUserBean.deleteUser}"
-                                   styleClass="btn-danger"
-                                   onclick="return confirm('Are you sure you want to permanently delete this user? This action cannot be undone.');">
-                        <f:ajax execute="@form" render="@form messages"/>
-                    </h:commandButton>
+                <!-- Check User Button -->
+                <h:panelGroup rendered="#{not deleteUserBean.showConfirmation}">
+                    <div class="button-container">
+                        <h:commandButton value="Delete User" 
+                                       action="#{deleteUserBean.checkUser}"
+                                       styleClass="btn-secondary">
+                            <f:ajax execute="@form" render="@form messages"/>
+                        </h:commandButton>
+                    </div>
+                </h:panelGroup>
+                
+                <!-- Confirmation Section -->
+                <h:panelGroup rendered="#{deleteUserBean.showConfirmation}">
+                    <div class="confirmation-section">
+                        <div class="form-row">
+                            <label class="form-label">Confirm email: <span class="required-star">*</span></label>
+                            <h:inputText value="#{deleteUserBean.confirmationEmail}" 
+                                        styleClass="form-input"
+                                        placeholder="Type the email again to confirm"
+                                        required="true"
+                                        requiredMessage="Please confirm the email"
+                                        id="confirmInput">
+                                <f:ajax event="blur" render="confirmMessage"/>
+                            </h:inputText>
+                            <h:message id="confirmMessage" for="confirmInput" styleClass="error-message-text"/>
+                        </div>
+                        
+                        <div class="email-display">
+                            Email to delete: <strong>#{deleteUserBean.userEmail}</strong>
+                            <br/>
+                            User type: 
+                            <span class="user-type-badge #{deleteUserBean.userType == 'Driver' ? 'driver-badge' : 'passenger-badge'}">
+                                #{deleteUserBean.userType}
+                            </span>
+                        </div>
+                        
+                        <div class="info-message">
+                            <p>⚠ Please type the email again to confirm deletion.</p>
+                        </div>
+                    </div>
                     
-                    <h:commandButton value="Cancel" 
-                                   action="#{deleteUserBean.cancel}"
-                                   styleClass="btn-secondary">
-                        <f:ajax execute="@this" render="@form"/>
-                    </h:commandButton>
-                    
-                </div>
-            </h:panelGroup>
-            
-            <!-- Messages -->
-            <h:messages id="messages" globalOnly="false" showDetail="true" 
-                       errorClass="error-message" 
-                       infoClass="success-message" 
-                       warnClass="info-message"/>
-            
-            <!-- Success Message -->
-            <h:panelGroup rendered="#{deleteUserBean.success}">
-                <div class="success-message message-container">
-                    <p>#{deleteUserBean.message}</p>
-                    <p>The user account has been permanently deleted from the system.</p>
-                </div>
-            </h:panelGroup>
-            
-        </h:form>
+                    <div class="button-container">
+                        <h:commandButton value="Delete User" 
+                                       action="#{deleteUserBean.deleteUser}"
+                                       styleClass="btn-danger"
+                                       onclick="return confirm('Are you sure you want to permanently delete this user? This action cannot be undone.');">
+                            <f:ajax execute="@form" render="@form messages"/>
+                        </h:commandButton>
+                        
+                        <h:commandButton value="Cancel" 
+                                       action="#{deleteUserBean.cancel}"
+                                       styleClass="btn-secondary">
+                            <f:ajax execute="@this" render="@form"/>
+                        </h:commandButton>
+                    </div>
+                </h:panelGroup>
+                
+                <!-- Messages -->
+                <h:messages id="messages" globalOnly="false" showDetail="true" 
+                           errorClass="error-message" 
+                           infoClass="success-message" 
+                           warnClass="info-message"/>
+            </h:form>
+        </h:panelGroup>
     </div>
 </h:body>
 </html>

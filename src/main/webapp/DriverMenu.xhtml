@@ -8,53 +8,138 @@
 <h:head>
     <title>Driver Menu</title>
     <style type="text/css">
+        /* Reset y estilos base */
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background-color: #f5f7fa;
+            min-height: 100vh;
+        }
+        
+        /* Contenedor principal centrado */
         .menu-container {
-            max-width: 600px;
-            margin: 50px auto;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        
+        /* Contenedor de contenido - ocupa la mitad superior */
+        .content-section {
             text-align: center;
-            font-family: Arial, sans-serif;
-        }
-        
-        .menu-title {
-            color: #333;
-            margin-bottom: 30px;
-            font-size: 24px;
-        }
-        
-        .welcome-message {
-            color: #666;
             margin-bottom: 40px;
-            font-size: 16px;
+            width: 100%;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding-top: 20px;
         }
         
+        /* Contenedor de botones - ocupa la mitad inferior */
+        .button-section {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding-bottom: 40px;
+        }
+        
+        /* Estilos para el título */
+        .menu-title {
+            color: #2c3e50;
+            margin-bottom: 15px;
+            font-size: 32px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+        
+        /* Estilos para el mensaje de bienvenida */
+        .welcome-message {
+            color: #546e7a;
+            margin-bottom: 10px;
+            font-size: 18px;
+            line-height: 1.6;
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .welcome-message p {
+            margin: 8px 0;
+        }
+        
+        /* Separador visual entre grupos */
+        .separator {
+            margin: 30px 0;
+            width: 100%;
+            max-width: 300px;
+            border-top: 2px solid #e0e6ed;
+        }
+        
+        /* Estilos base para botones */
         .menu-button {
             display: block;
-            margin: 15px auto;
-            padding: 12px 25px;
-            width: 250px;
+            margin: 8px auto; /* Reducido de 12px para mejor control */
+            padding: 14px 25px;
+            width: 280px;
             font-size: 16px;
+            font-weight: 500;
             background-color: #007bff;
             color: white;
             border: none;
-            border-radius: 5px;
+            border-radius: 8px;
             cursor: pointer;
-            transition: background-color 0.3s;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            text-align: center;
         }
         
         .menu-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+        }
+        
+        /* Espaciado específico para cada botón */
+        .create-ride-button {
+            background-color: #007bff;
+            margin-top: 15px; /* Espacio después del label del grupo */
+        }
+        
+        .create-ride-button:hover {
             background-color: #0056b3;
         }
         
         .requests-button {
             background-color: #28a745;
+            margin-bottom: 10px; /* Espacio antes del separador */
         }
         
         .requests-button:hover {
             background-color: #1e7e34;
         }
         
+        .add-car-button {
+            background-color: #17a2b8;
+            margin-top: 15px; /* Espacio después del label del grupo */
+            margin-bottom: 10px; /* Espacio antes del separador */
+        }
+        
+        .add-car-button:hover {
+            background-color: #117a8b;
+        }
+        
         .danger-button {
             background-color: #dc3545;
+            margin-top: 15px; /* Espacio después del label del grupo */
+            margin-bottom: 10px; /* Espacio antes del separador */
         }
         
         .danger-button:hover {
@@ -63,59 +148,114 @@
         
         .back-button {
             background-color: #6c757d;
-            margin-top: 30px;
+            margin-top: 10px; /* Separación del grupo anterior */
         }
         
         .back-button:hover {
             background-color: #5a6268;
         }
         
-        .separator {
-            margin: 30px 0;
-            border-top: 1px solid #ddd;
+        /* Etiqueta para grupos de botones */
+        .button-group-label {
+            color: #5a6268;
+            font-size: 14px;
+            margin: 25px 0 5px 0; /* Más espacio arriba, menos abajo */
+            font-weight: 500;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+        
+        /* Contenedor para agrupar botones relacionados */
+        .button-group {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+        }
+        
+        /* Responsive */
+        @media (max-width: 600px) {
+            .menu-container {
+                padding: 15px;
+            }
+            
+            .menu-title {
+                font-size: 26px;
+            }
+            
+            .welcome-message {
+                font-size: 16px;
+            }
+            
+            .menu-button {
+                width: 100%;
+                max-width: 280px;
+                padding: 12px 20px;
+            }
+            
+            .separator {
+                margin: 25px 0;
+            }
         }
     </style>
 </h:head>
 
 <h:body>
     <div class="menu-container">
-        <h2 class="menu-title">Driver Menu</h2>
-        
-        <div class="welcome-message">
-            <p>Welcome, Driver!</p>
-            <p>Manage your rides and requests</p>
+        <!-- Sección de contenido - mitad superior -->
+        <div class="content-section">
+            <h2 class="menu-title">Driver Menu</h2>
+            
+            <div class="welcome-message">
+                <p>Welcome, Driver!</p>
+                <p>Manage your rides and requests from this dashboard</p>
+            </div>
         </div>
         
-        <h:form id="driverMenuForm">
-            
-            <!-- Ride Management Section -->
-            <p:commandButton value="Create Ride" 
-                             action="CreateRide.xhtml?faces-redirect=true" 
-                             styleClass="menu-button" />
-            
-            <p:commandButton value="See Ride Requests" 
-                             action="seeRequests.xhtml?faces-redirect=true" 
-                             styleClass="menu-button requests-button" />
-            
-            <!-- Car Management -->
-            <p:commandButton value="Add Car" 
-                             action="AddCar.xhtml?faces-redirect=true" 
-                             styleClass="menu-button" />
-            
-            <!-- Separator -->
-            <div class="separator"></div>
-            
-            <!-- Account Management -->
-            <p:commandButton value="Delete Account" 
-                             action="DeleteUser.xhtml?faces-redirect=true" 
-                             styleClass="menu-button danger-button" />
-            
-            <!-- Navigation -->
-            <p:commandButton value="Back to Home" 
-                             action="Login.xhtml?faces-redirect=true" 
-                             styleClass="menu-button back-button" />
-            
-        </h:form>
+        <!-- Sección de botones - mitad inferior -->
+        <div class="button-section">
+            <h:form id="driverMenuForm">
+                <!-- Ride Management -->
+                <div class="button-group">
+                    <div class="button-group-label">Ride Management</div>
+                    <p:commandButton value="Create Ride" 
+                                     action="CreateRide.xhtml?faces-redirect=true" 
+                                     styleClass="menu-button create-ride-button" />
+                    
+                    <p:commandButton value="See Ride Requests" 
+                                     action="seeRequests.xhtml?faces-redirect=true" 
+                                     styleClass="menu-button requests-button" />
+                </div>
+                
+                <!-- Separador -->
+                <div class="separator"></div>
+                
+                <!-- Car Management -->
+                <div class="button-group">
+                    <div class="button-group-label">Vehicle Management</div>
+                    <p:commandButton value="Add Car" 
+                                     action="AddCar.xhtml?faces-redirect=true" 
+                                     styleClass="menu-button add-car-button" />
+                </div>
+                
+                <!-- Separador -->
+                <div class="separator"></div>
+                
+                <!-- Account Management -->
+                <div class="button-group">
+                    <div class="button-group-label">Account Settings</div>
+                    <p:commandButton value="Delete Account" 
+                                     action="DeleteUser.xhtml?faces-redirect=true" 
+                                     styleClass="menu-button danger-button" />
+                </div>
+                
+                <!-- Navigation -->
+                <p:commandButton value="Back to Home" 
+                                 action="Hasierahasiera.xhtml?faces-redirect=true" 
+                                 styleClass="menu-button back-button" />
+                
+            </h:form>
+        </div>
     </div>
 </h:body>
 </html>

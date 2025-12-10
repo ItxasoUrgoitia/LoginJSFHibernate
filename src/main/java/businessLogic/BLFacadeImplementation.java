@@ -158,4 +158,8 @@ public class BLFacadeImplementation implements BLFacade {
 	     return dbManager.rejectRequest(requestId);
 	 }
 	 
+	 public Passenger getPassenger(String email) {
+		 return dbManager.getPassenger(email);
+	 }
+	 
 }

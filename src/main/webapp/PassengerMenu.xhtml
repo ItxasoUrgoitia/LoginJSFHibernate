@@ -8,53 +8,138 @@
 <h:head>
     <title>Passenger Menu</title>
     <style type="text/css">
+        /* Reset y estilos base - Mismo que Driver Menu */
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background-color: #f5f7fa;
+            min-height: 100vh;
+        }
+        
+        /* Contenedor principal centrado - Mismo que Driver Menu */
         .menu-container {
-            max-width: 600px;
-            margin: 50px auto;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        
+        /* Contenedor de contenido - Mismo que Driver Menu */
+        .content-section {
             text-align: center;
-            font-family: Arial, sans-serif;
+            margin-bottom: 25px;
+            width: 100%;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding-top: 20px;
         }
         
+        /* Contenedor de botones - Mismo que Driver Menu */
+        .button-section {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding-bottom: 40px;
+        }
+        
+        /* Estilos para el título - Mismo que Driver Menu */
         .menu-title {
-            color: #333;
-            margin-bottom: 30px;
-            font-size: 24px;
+            color: #2c3e50;
+            margin-bottom: 15px;
+            font-size: 32px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
         }
         
+        /* Estilos para el mensaje de bienvenida - Mismo que Driver Menu */
         .welcome-message {
-            color: #666;
-            margin-bottom: 40px;
-            font-size: 16px;
+            color: #546e7a;
+            margin-bottom: 5px;
+            font-size: 18px;
+            line-height: 1.6;
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
         }
         
+        .welcome-message p {
+            margin: 8px 0;
+        }
+        
+        /* Separador visual entre grupos - Mismo que Driver Menu */
+        .separator {
+            margin: 25px 0;
+            width: 100%;
+            max-width: 300px;
+            border-top: 2px solid #e0e6ed;
+        }
+        
+        /* Estilos base para botones - Mismo que Driver Menu */
         .menu-button {
             display: block;
-            margin: 15px auto;
-            padding: 12px 25px;
-            width: 250px;
+            margin: 6px auto;
+            padding: 14px 25px;
+            width: 280px;
             font-size: 16px;
-            background-color: #28a745;
+            font-weight: 500;
+            background-color: #28a745; /* Color verde específico de Passenger */
             color: white;
             border: none;
-            border-radius: 5px;
+            border-radius: 8px;
             cursor: pointer;
-            transition: background-color 0.3s;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            text-align: center;
         }
         
         .menu-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+        }
+        
+        /* Variantes de botones para Passenger Menu */
+        .search-rides-button {
+            background-color: #28a745;
+            margin-top: 10px;
+        }
+        
+        .search-rides-button:hover {
+            background-color: #218838; /* Color hover específico */
+        }
+        
+        .request-ride-button {
+            background-color: #28a745;
+            margin-bottom: 8px;
+        }
+        
+        .request-ride-button:hover {
             background-color: #218838;
         }
         
         .deposit-button {
-            background-color: #17a2b8;
+            background-color: #17a2b8; /* Color azul turquesa específico */
+            margin-top: 10px;
+            margin-bottom: 8px;
         }
         
         .deposit-button:hover {
-            background-color: #138496;
+            background-color: #138496; /* Color hover específico */
         }
         
         .danger-button {
             background-color: #dc3545;
+            margin-top: 10px;
+            margin-bottom: 8px;
         }
         
         .danger-button:hover {
@@ -63,59 +148,121 @@
         
         .back-button {
             background-color: #6c757d;
-            margin-top: 30px;
+            margin-top: 8px;
         }
         
         .back-button:hover {
             background-color: #5a6268;
         }
         
-        .separator {
-            margin: 30px 0;
-            border-top: 1px solid #ddd;
+        /* Etiqueta para grupos de botones - Mismo que Driver Menu */
+        .button-group-label {
+            color: #5a6268;
+            font-size: 14px;
+            margin: 15px 0 3px 0;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+        
+        /* Contenedor para agrupar botones relacionados - Mismo que Driver Menu */
+        .button-group {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+        }
+        
+        /* Espaciado adicional específico entre botones del mismo grupo */
+        .request-ride-button {
+            margin-top: 10px; /* Espacio entre Search Rides y Request a Ride */
+        }
+        
+        /* Responsive - Mismo que Driver Menu */
+        @media (max-width: 600px) {
+            .menu-container {
+                padding: 15px;
+            }
+            
+            .menu-title {
+                font-size: 26px;
+            }
+            
+            .welcome-message {
+                font-size: 16px;
+            }
+            
+            .menu-button {
+                width: 100%;
+                max-width: 280px;
+                padding: 12px 20px;
+            }
+            
+            .separator {
+                margin: 20px 0;
+            }
+            
+            .content-section {
+                margin-bottom: 20px;
+            }
         }
     </style>
 </h:head>
 
 <h:body>
     <div class="menu-container">
-        <h2 class="menu-title">Passenger Menu</h2>
-        
-        <div class="welcome-message">
-            <p>Welcome, Passenger!</p>
-            <p>What would you like to do today?</p>
+        <!-- Sección de contenido - mitad superior -->
+        <div class="content-section">
+            <h2 class="menu-title">Passenger Menu</h2>
+            
+            <div class="welcome-message">
+                <p>Welcome, Passenger!</p>
+                <p>What would you like to do today?</p>
+            </div>
         </div>
         
-        <h:form id="passengerMenuForm">
-            
-            <!-- Ride Management Section -->
-            <p:commandButton value="Search Rides" 
-                             action="QueryRides.xhtml?faces-redirect=true" 
-                             styleClass="menu-button" />
-            
-            <p:commandButton value="Request a Ride" 
-                             action="RequestRide.xhtml?faces-redirect=true" 
-                             styleClass="menu-button" />
-            
-            <!-- Account Management -->
-            <p:commandButton value="Deposit Money" 
-                             action="DepositMoney.xhtml?faces-redirect=true" 
-                             styleClass="menu-button deposit-button" />
-            
-            <!-- Separator -->
-            <div class="separator"></div>
-            
-            <!-- Dangerous Actions -->
-            <p:commandButton value="Delete Account" 
-                             action="DeleteUser.xhtml?faces-redirect=true" 
-                             styleClass="menu-button danger-button" />
-            
-            <!-- Navigation -->
-            <p:commandButton value="Back to Home" 
-                             action="Login.xhtml?faces-redirect=true" 
-                             styleClass="menu-button back-button" />
-            
-        </h:form>
+        <!-- Sección de botones - mitad inferior -->
+        <div class="button-section">
+            <h:form id="passengerMenuForm">
+                <!-- Ride Management -->
+                <div class="button-group">
+                    <div class="button-group-label">RIDE MANAGEMENT</div>
+                    
+                    
+                    <p:commandButton value="Request a Ride" 
+                                     action="RequestRide.xhtml?faces-redirect=true" 
+                                     styleClass="menu-button request-ride-button" />
+                </div>
+                
+                <!-- Separador -->
+                <div class="separator"></div>
+                
+                <!-- Account Management -->
+                <div class="button-group">
+                    <div class="button-group-label">ACCOUNT MANAGEMENT</div>
+                    <p:commandButton value="Deposit Money" 
+                                     action="DepositMoney.xhtml?faces-redirect=true" 
+                                     styleClass="menu-button deposit-button" />
+                </div>
+                
+                <!-- Separador -->
+                <div class="separator"></div>
+                
+                <!-- Dangerous Actions -->
+                <div class="button-group">
+                    <div class="button-group-label">ACCOUNT SETTINGS</div>
+                    <p:commandButton value="Delete Account" 
+                                     action="DeleteUser.xhtml?faces-redirect=true" 
+                                     styleClass="menu-button danger-button" />
+                </div>
+                
+                <!-- Navigation -->
+                <p:commandButton value="Back to Home" 
+                                 action="Hasierahasiera.xhtml?faces-redirect=true" 
+                                 styleClass="menu-button back-button" />
+                
+            </h:form>
+        </div>
     </div>
 </h:body>
 </html>

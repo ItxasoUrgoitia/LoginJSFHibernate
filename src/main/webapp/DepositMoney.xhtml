@@ -44,11 +44,29 @@
         <h2>Deposit Money</h2>
 
         <h:form id="depositForm">
-            <!-- Email -->
-            <div class="form-row">
-                <div class="form-label">Email</div>
-                <p:inputText value="#{DepositBean.email}" placeholder="Enter your email" style="width:300px" />
-            </div>
+        <!-- Si no es passenger -->
+            <h:panelGroup rendered="#{not DepositBean.passengerLoggedIn}">
+                <div class="error-message">
+                    <h3>⚠️ Access Restricted</h3>
+                    <p>Only passenger can deposit money.</p>
+                    <p:commandButton value="Go to Login" 
+                                   action="login.xhtml?faces-redirect=true" />
+                </div>
+            </h:panelGroup>
+            
+            <!-- Contenido solo para passenger logeados -->
+            <h:panelGroup rendered="#{DepositBean.passengerLoggedIn}">
+            
+                <!-- Información del usuario -->
+                <div class="form-row">
+                    <div class="form-label">
+                        <h:outputLabel value="Passenger Info" />
+                    </div>
+                    <div class="user-info">
+                        <p><strong>Email:</strong> #{DepositBean.passengerEmail}</p>
+                    </div>
+                </div>
+            
 
             <!-- Amount -->
             <div class="form-row">
@@ -61,7 +79,9 @@
 
             <!-- Messages -->
             <p:messages autoUpdate="true" />
+            </h:panelGroup> 
         </h:form>
+        
     </div>
 </h:body>
 </html>

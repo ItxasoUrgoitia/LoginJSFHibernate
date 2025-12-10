@@ -1,119 +1,124 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:f="http://xmlns.jcp.org/jsf/core"
-      xmlns:p="http://primefaces.org/ui">
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
 
 <h:head>
-    <title>Login</title>
+	<title>Login</title>
 
-    <style>
-        .form-container {
-            max-width: 500px;
-            margin: 100px auto;
-            padding: 30px;
-            font-family: Arial, sans-serif;
-            background-color: #f9f9f9;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        }
+	<style>
+.form-container {
+	max-width: 500px;
+	margin: 100px auto;
+	padding: 30px;
+	font-family: Arial, sans-serif;
+	background-color: #f9f9f9;
+	border-radius: 8px;
+	box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
 
-        .form-row {
-            display: flex;
-            align-items: center;
-            margin-bottom: 20px;
-            gap: 20px;
-        }
+.form-row {
+	display: flex;
+	align-items: center;
+	margin-bottom: 20px;
+	gap: 20px;
+}
 
-        .form-label {
-            min-width: 120px;
-            font-weight: bold;
-            font-size: 14px;
-        }
+.form-label {
+	min-width: 120px;
+	font-weight: bold;
+	font-size: 14px;
+}
 
-        .form-field {
-            flex: 1;
-        }
+.form-field {
+	flex: 1;
+}
 
-        .button-row {
-            display: flex;
-            justify-content: space-between;
-            gap: 20px;
-            margin-top: 25px;
-        }
+.button-row {
+	display: flex;
+	justify-content: space-between;
+	gap: 20px;
+	margin-top: 25px;
+}
 
-        .form-button {
-            flex: 1;
-            padding: 12px 30px;
-            font-size: 16px;
-            font-weight: bold;
-            background-color: #007bff;
-            border: none;
-            color: white;
-            border-radius: 5px;
-            cursor: pointer;
-        }
+.form-button {
+	flex: 1;
+	padding: 12px 30px;
+	font-size: 16px;
+	font-weight: bold;
+	background-color: #007bff;
+	border: none;
+	color: white;
+	border-radius: 5px;
+	cursor: pointer;
+}
 
-        .form-button:hover {
-            background-color: #0056b3;
-        }
-    </style>
+.form-button:hover {
+	background-color: #0056b3;
+}
+</style>
 </h:head>
 
 <h:body>
 
-<div class="form-container">
+	<div class="form-container">
 
-    <h2 style="font-size: 24px; margin-bottom: 25px; color: #333; text-align:center;">
-        Login
-    </h2>
+		<h2
+			style="font-size: 24px; margin-bottom: 25px; color: #333; text-align: center;">
+			Login</h2>
 
-    <h:form>
+		<h:form>
 
-        <!-- EMAIL -->
-        <div class="form-row">
-            <div class="form-label">
-                <h:outputLabel for="email" value="Email" />
-            </div>
-            <div class="form-field">
-                <p:inputText id="email" value="#{login.email}"
-                             placeholder="Enter your email" style="width:250px" />
-            </div>
-        </div>
+			<!-- EMAIL -->
+			<div class="form-row">
+				<div class="form-label">
+					<h:outputLabel for="email" value="Email" />
+				</div>
+				<div class="form-field">
+					<p:inputText id="email" value="#{login.email}"
+						placeholder="Enter your email" style="width:250px" />
+				</div>
+			</div>
 
-        <!-- PASSWORD -->
-        <div class="form-row">
-            <div class="form-label">
-                <h:outputLabel for="password" value="Password" />
-            </div>
-            <div class="form-field">
-                <p:password id="password" value="#{login.pasahitza}"
-                            feedback="false" style="width:250px" />
-            </div>
-        </div>
+			<!-- PASSWORD -->
+			<div class="form-row">
+				<div class="form-label">
+					<h:outputLabel for="password" value="Password" />
+				</div>
+				<div class="form-field">
+					<p:password id="password" value="#{login.pasahitza}"
+						feedback="false" style="width:250px" />
+				</div>
+			</div>
 
-        <!-- BUTTONS IN HORIZONTAL ROW -->
-        <div class="button-row">
+			<!-- BUTTONS IN HORIZONTAL ROW -->
+			<div class="button-row">
 
-			<p:commandButton value="Register"
-                             action="Register.xhtml?faces-redirect=true"
-                             styleClass="form-button" />
-			
+				<p:commandButton value="Register"
+					action="Register.xhtml?faces-redirect=true"
+					styleClass="form-button" />
 
-            <p:commandButton value="Login"
-                             action="#{login.egiaztatu}"
-                             update="messages messageOutput"
-                             styleClass="form-button" />
 
-        </div>
+				<p:commandButton value="Login" action="#{login.egiaztatu}"
+					update="messages messageOutput" styleClass="form-button" />
 
-        <p:messages id="messages" autoUpdate="true" />
-        <h:outputText id="messageOutput" value="#{login.message}" style="color:red; font-weight:bold; margin-top:15px;" />
-        
+			</div>
 
-    </h:form>
+			<p:messages id="messages" autoUpdate="true" />
+			<h:outputText id="messageOutput" value="#{login.message}"
+				style="color:red; font-weight:bold; margin-top:15px;" />
+			<!-- BOTÓN BACK -->
+			<div class="button-row" style="margin-top: 20px;">
+				<p:commandButton value="Back"
+					action="Hasierahasiera.xhtml?faces-redirect=true"
+					styleClass="form-button" />
+			</div>
 
-</div>
+
+		</h:form>
+
+	</div>
 
 </h:body>
 </html>
