@@ -65,7 +65,7 @@ public class RequestBean implements Serializable {
             ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error1", "Enter your email"));
             return;
         }
-        if (selectedRide == null) {  // Cambiado: ahora comprobamos selectedRide
+        if (selectedRide == null) {  
             ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error2", "Select a ride"));
             return;
         }
@@ -77,7 +77,7 @@ public class RequestBean implements Serializable {
         boolean ok = facadeBL.createRequest(PassengerEmail, selectedRide.getRideNumber(), seats);
         if (ok) {
             loadRides();
-            // Limpiamos la selección después de la reserva exitosa
+            
             this.selectedRide = null;
             this.seats = 0;
             ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "OK", "Request created and accepted"));
@@ -114,7 +114,7 @@ public class RequestBean implements Serializable {
                 System.out.println(">>> Session userEmail: " + userEmail);
                 System.out.println(">>> Session userType: " + userType);
                 
-                // DEPURACIÓN: Mostrar todas las variables de sesión
+                
                 java.util.Enumeration<String> sessionAttr = session.getAttributeNames();
                 System.out.println(">>> All session attributes:");
                 while (sessionAttr.hasMoreElements()) {
@@ -125,7 +125,7 @@ public class RequestBean implements Serializable {
                 if (userEmail != null && "Passenger".equals(userType)) {
                     this.PassengerEmail = userEmail;
                     
-                    // Obtener nombre del Passenger para mostrar
+                    
                     try {
                     	Passenger Passenger = facadeBL.getPassenger(userEmail);
                         if (Passenger != null) {
@@ -161,7 +161,7 @@ public class RequestBean implements Serializable {
         this.rides = facadeBL.getAllRides();
     }
     
-    // Método para limpiar la selección (opcional)
+    
     public void clearSelection() {
         this.selectedRide = null;
         this.seats = 0;

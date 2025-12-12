@@ -188,7 +188,7 @@ public class HibernateDataAccess {
 		try {
 			tx.begin();
 
-			/*//Gidariak sortu
+			//Gidariak sortu
 			Driver d1 = new Driver("alice@example.com", "Alice", "456");
 			Driver d2 = new Driver("bob@example.com", "Bob", "789");
 			em.persist(d1);
@@ -219,7 +219,7 @@ public class HibernateDataAccess {
 			Car c2 = new Car("2345ABC", 4, "fsf", "blue", d1);
 
 			em.persist(c1);
-			em.persist(c2);*/
+			em.persist(c2);
 			
 			
 			tx.commit();

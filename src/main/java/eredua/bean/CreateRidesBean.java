@@ -45,7 +45,7 @@ public class CreateRidesBean implements Serializable {
     private boolean rideCreated = false; 
     private String message; 
 
-    // Getters y Setters
+    
     public String getDepartCity() { return departCity; }
     public void setDepartCity(String departCity) { this.departCity = departCity; }
 
@@ -94,7 +94,7 @@ public class CreateRidesBean implements Serializable {
     public Car getSelectedCar() { return selectedCar; }
     public void setSelectedCar(Car selectedCar) { this.selectedCar = selectedCar; }
 
-    // Evento de selección de fecha
+    
     public void onDateSelect(SelectEvent event) {
         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Selected date: " + event.getObject()));
     }
@@ -125,7 +125,7 @@ public class CreateRidesBean implements Serializable {
                 System.out.println(">>> Session userEmail: " + userEmail);
                 System.out.println(">>> Session userType: " + userType);
                 
-                // DEPURACIÓN: Mostrar todas las variables de sesión
+                
                 java.util.Enumeration<String> sessionAttr = session.getAttributeNames();
                 System.out.println(">>> All session attributes:");
                 while (sessionAttr.hasMoreElements()) {
@@ -136,7 +136,7 @@ public class CreateRidesBean implements Serializable {
                 if (userEmail != null && "Driver".equals(userType)) {
                     this.driverEmail = userEmail;
                     
-                    // Obtener nombre del driver para mostrar
+                    
                     try {
                         Driver driver = facadeBL.getDriver(userEmail);
                         if (driver != null) {
@@ -185,11 +185,11 @@ public class CreateRidesBean implements Serializable {
 
   
 
-    // Acción del botón "Create Ride"
+    
     public void createRide() {
         rideCreated = false;
 
-        // Validaciones
+        
         if (departCity == null || departCity.isEmpty()) {
             message = "Please select a departure city.";
             return;
@@ -212,7 +212,7 @@ public class CreateRidesBean implements Serializable {
         }
         
 
-        // Crear ride
+        
         facadeBL = FacadeBean.getBusinessLogic();
         try {
             facadeBL.createRide(departCity, arrivalCity, data, selectedCar.getPlaces(), price, driverEmail);
@@ -231,7 +231,7 @@ public class CreateRidesBean implements Serializable {
         message = "✓ Ride created successfully!";
     }
 
-    // Método auxiliar para cargar ciudades
+    
     public void ns() {
         facadeBL = FacadeBean.getBusinessLogic();
         this.departCities = facadeBL.getDepartCities();

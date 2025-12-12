@@ -28,14 +28,7 @@ public class LoginBean implements Serializable {
 	private BLFacade facadeBL;
 	private String message;
 	
-	/*public LoginBean() {
-		motak.add(new ErabiltzailearenMota(1,"ikaslea"));
-		motak.add(new ErabiltzailearenMota(2,"irakaslea"));
-	}*/
 	
-	/*public List<ErabiltzailearenMota> getMotak() {
-		return motak;
-	}*/
 	
 	public LoginBean() {
 		facadeBL=FacadeBean.getBusinessLogic();

@@ -26,7 +26,7 @@ public class DeleteUserBean implements Serializable {
     private boolean success = false;
     private boolean showConfirmation = false;
     private String userName;
-    private String userType;  // Nuevo: para saber si es Driver o Passenger
+    private String userType;  
     
     public String getUserName() {
         return userName;
@@ -79,7 +79,7 @@ public class DeleteUserBean implements Serializable {
                 System.out.println(">>> Session userEmail: " + sessionUserEmail);
                 System.out.println(">>> Session userType: " + sessionUserType);
                 
-                // DEPURACIÓN: Mostrar todas las variables de sesión
+                
                 java.util.Enumeration<String> sessionAttr = session.getAttributeNames();
                 System.out.println(">>> All session attributes:");
                 while (sessionAttr.hasMoreElements()) {
@@ -91,7 +91,7 @@ public class DeleteUserBean implements Serializable {
                     this.userEmail = sessionUserEmail;
                     this.userType = sessionUserType;
                     
-                    // Obtener nombre del usuario para mostrar
+                    
                     try {
                         if ("Driver".equals(userType)) {
                             Driver driver = facadeBL.getDriver(userEmail);
@@ -169,7 +169,7 @@ public class DeleteUserBean implements Serializable {
         }
         
         try {
-            // Guardar el email antes de eliminarlo para usar en el mensaje
+            
             String emailToDelete = userEmail;
             boolean result = facadeBL.deleteUser(emailToDelete);
             
@@ -179,10 +179,10 @@ public class DeleteUserBean implements Serializable {
                 FacesContext.getCurrentInstance().addMessage(null, 
                     new FacesMessage(FacesMessage.SEVERITY_INFO, "Success", "User deleted successfully!"));
                 
-                // Invalidar sesión si el usuario eliminado es el que está logeado
+                
                 invalidateSessionIfDeletedUserIsLogged(emailToDelete);
                 
-                // Limpiar campos pero mantener el mensaje de éxito
+                
                 userEmail = null;
                 confirmationEmail = null;
                 showConfirmation = false;
@@ -218,7 +218,7 @@ public class DeleteUserBean implements Serializable {
                     session.invalidate();
                     try {
                         context.getExternalContext().redirect("Register.xhtml");
-                        context.responseComplete(); // Importante: completar la respuesta
+                        context.responseComplete(); 
                     } catch (IOException e) {
                         System.out.println(">>> Error redirecting to login: " + e.getMessage());
                     }
@@ -240,7 +240,7 @@ public class DeleteUserBean implements Serializable {
         return "Hasierahasiera.xhtml?faces-redirect=true";
     }
     
-    // Getters and Setters
+    
     
     public String getConfirmationEmail() { return confirmationEmail; }
     public void setConfirmationEmail(String confirmationEmail) { this.confirmationEmail = confirmationEmail; }

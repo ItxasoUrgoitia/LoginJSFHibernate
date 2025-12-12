@@ -143,7 +143,7 @@ public class Ride implements Serializable {
         return rideNumber+";"+from+";"+to+";"+date;  
     }
     
-    // Métodos para comparación en el converter
+    
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

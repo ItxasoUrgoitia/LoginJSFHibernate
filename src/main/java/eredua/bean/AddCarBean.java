@@ -30,7 +30,7 @@ public class AddCarBean {
         facadeBL = FacadeBean.getBusinessLogic();
     }
     
-    // Getters y Setters
+   
     public String getLicensePlate() {
         return licensePlate;
     }
@@ -122,7 +122,7 @@ public class AddCarBean {
                 System.out.println(">>> Session userEmail: " + userEmail);
                 System.out.println(">>> Session userType: " + userType);
                 
-                // DEPURACIÓN: Mostrar todas las variables de sesión
+                
                 java.util.Enumeration<String> sessionAttr = session.getAttributeNames();
                 System.out.println(">>> All session attributes:");
                 while (sessionAttr.hasMoreElements()) {
@@ -133,7 +133,7 @@ public class AddCarBean {
                 if (userEmail != null && "Driver".equals(userType)) {
                     this.driverEmail = userEmail;
                     
-                    // Obtener nombre del driver para mostrar
+                    
                     try {
                         Driver driver = facadeBL.getDriver(userEmail);
                         if (driver != null) {
@@ -165,7 +165,7 @@ public class AddCarBean {
         success = false;
         message = null;
         
-        // Validaciones
+        
         if (licensePlate == null || licensePlate.trim().isEmpty()) {
             message = "License plate is required";
             FacesContext.getCurrentInstance().addMessage(null, 
@@ -196,7 +196,7 @@ public class AddCarBean {
                 FacesContext.getCurrentInstance().addMessage(null, 
                     new FacesMessage(FacesMessage.SEVERITY_INFO, "Success", "Car added successfully!"));
                 
-                // Limpiar campos después de éxito
+                
                 licensePlate = null;
                 places = null;
                 model = null;

@@ -59,7 +59,7 @@ public class SeeRequestsBean implements Serializable {
                 System.out.println(">>> Session userEmail: " + userEmail);
                 System.out.println(">>> Session userType: " + userType);
                 
-                // DEPURACIÓN: Mostrar todas las variables de sesión
+                
                 java.util.Enumeration<String> sessionAttr = session.getAttributeNames();
                 System.out.println(">>> All session attributes:");
                 while (sessionAttr.hasMoreElements()) {
@@ -70,7 +70,7 @@ public class SeeRequestsBean implements Serializable {
                 if (userEmail != null && "Driver".equals(userType)) {
                     this.driverEmail = userEmail;
                     
-                    // Obtener nombre del driver para mostrar
+                    
                     try {
                         Driver driver = facadeBL.getDriver(userEmail);
                         if (driver != null) {
@@ -122,7 +122,7 @@ public class SeeRequestsBean implements Serializable {
             if (success) {
                 FacesContext.getCurrentInstance().addMessage(null,
                     new FacesMessage(FacesMessage.SEVERITY_INFO, "Success", "Request accepted successfully!"));
-                loadDriverRequests(); // Refrescar la lista
+                loadDriverRequests(); 
             } else {
                 FacesContext.getCurrentInstance().addMessage(null,
                     new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Could not accept request."));
@@ -141,7 +141,7 @@ public class SeeRequestsBean implements Serializable {
             if (success) {
                 FacesContext.getCurrentInstance().addMessage(null,
                     new FacesMessage(FacesMessage.SEVERITY_INFO, "Success", "Request rejected successfully!"));
-                loadDriverRequests(); // Refrescar la lista
+                loadDriverRequests(); 
             } else {
                 FacesContext.getCurrentInstance().addMessage(null,
                     new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Could not reject request."));
@@ -153,7 +153,7 @@ public class SeeRequestsBean implements Serializable {
         }
     }
     
-    // Getters y Setters
+    
     public List<Request> getDriverRequests() { 
         return driverRequests; 
     }

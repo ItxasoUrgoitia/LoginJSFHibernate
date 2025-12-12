@@ -46,7 +46,7 @@ public class Request implements Serializable {
         this.egoera=EskaeraEgoera.PENDING;
     }
 
-    // getters / setters
+    
 
     
 

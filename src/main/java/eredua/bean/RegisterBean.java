@@ -61,7 +61,7 @@ public class RegisterBean {
 	                facadeBL.createPassenger(passenger);
 	            }
 	            message = "User registered successfully!";
-	            return "Login.xhtml?faces-redirect=true"; // Redirigir al login después de registro
+	            return "Login.xhtml?faces-redirect=true"; 
 	        } catch (Exception e) {
 	            message = "Error registering user. " + e.getMessage();
 	            return null;

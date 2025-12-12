@@ -15,8 +15,8 @@ public class ns {
 	private String selectedCity;
 
 	public ns() {
-		facadeBL = FacadeBean.getBusinessLogic(); // obtener la fachada
-		cities = facadeBL.getDepartCities(); // cargar ciudades
+		facadeBL = FacadeBean.getBusinessLogic(); 
+		cities = facadeBL.getDepartCities(); 
 	}
 
 	public List<String> getCities() {

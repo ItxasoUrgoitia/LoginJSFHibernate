@@ -72,7 +72,7 @@ public class DepositMoneyBean {
                 System.out.println(">>> Session userEmail: " + userEmail);
                 System.out.println(">>> Session userType: " + userType);
                 
-                // DEPURACIÓN: Mostrar todas las variables de sesión
+                
                 java.util.Enumeration<String> sessionAttr = session.getAttributeNames();
                 System.out.println(">>> All session attributes:");
                 while (sessionAttr.hasMoreElements()) {
@@ -83,7 +83,7 @@ public class DepositMoneyBean {
                 if (userEmail != null && "Passenger".equals(userType)) {
                     this.PassengerEmail = userEmail;
                     
-                    // Obtener nombre del Passenger para mostrar
+                    
                     try {
                     	Passenger Passenger = facadeBL.getPassenger(userEmail);
                         if (Passenger != null) {
@@ -111,7 +111,7 @@ public class DepositMoneyBean {
         return loggedIn;
     }
     
-    // Acción del botón
+    
     public void depositMoney() {
         FacesContext context = FacesContext.getCurrentInstance();
 
